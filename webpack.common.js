@@ -4,10 +4,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   entry: {
     main: './src/index.ts',
-    example: './src/Examples.ts' 
+    example: './src/Examples.tsx' 
   },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'lib')
   },
   module: {
@@ -60,6 +60,7 @@ module.exports = {
             <title>${htmlWebpackPlugin.options.title}</title>
           </head>
           <body style="margin: 0; padding: 0; width: 100%; height: 100vh;">
+            <div id="root"></div>
           </body>
         </html>
       `
