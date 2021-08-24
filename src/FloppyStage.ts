@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import FloppyObject from './FloppyObject';
 
 class FloppyStage {
   scene: THREE.Scene;
@@ -56,14 +57,8 @@ class FloppyStage {
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
 
-    const cubeSize = 0.6;
-    const cubeGeo = new THREE.BoxGeometry(8, cubeSize, 8);
-    const cubeMat = new THREE.MeshPhongMaterial({color: '#8AC'});
-    const mesh = new THREE.Mesh(cubeGeo, cubeMat);
-    mesh.position.set(0, 10, 0);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    this.scene.add(mesh);
+    const floppy = new FloppyObject({ x: 8, y: 0.6, z: 8});
+    this.scene.add(floppy.mesh);
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.shadowMap.enabled = true;
