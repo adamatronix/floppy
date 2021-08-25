@@ -7,7 +7,10 @@ const Example = () => {
   const containerEl = useRef();
 
   useEffect(() => {
-    new FloppyStage();
+    new FloppyStage({
+      ground: false,
+      background: false
+    });
   }, []);
 
   return (
