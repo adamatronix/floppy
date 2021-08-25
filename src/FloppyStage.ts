@@ -6,7 +6,12 @@ interface Origin {
   y: number;
 }
 
+interface LooseObject {
+  [key: string]: any
+}
+
 class FloppyStage {
+  options: LooseObject;
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
   renderer: THREE.WebGLRenderer;
@@ -14,7 +19,16 @@ class FloppyStage {
   origin: Origin;
   floppy: FloppyObject;
 
-  constructor() {
+
+  constructor(el: HTMLDivElement, options?: LooseObject) {
+    this.container = el;
+    this.options = {
+      ground: true,
+      background: true
+    }
+
+    this.options = { ...this.options, ...options};
+
     this.setupWorld();
     this.setupEvents();
     this.renderFrame();
@@ -27,13 +41,6 @@ class FloppyStage {
   }
 
   setupWorld = () => {
-    this.container = document.createElement('div');
-    this.container.style.width = '100%';
-    this.container.style.height = '100vh';
-    this.container.style.position = 'absolute';
-    this.container.style.top = '0';
-    this.container.style.left = '0';
-    document.body.appendChild(this.container);
     this.origin = { x: this.container.offsetWidth/2, y: this.container.offsetHeight/2 };
 
     this.scene = new THREE.Scene();
@@ -41,15 +48,19 @@ class FloppyStage {
     const planeGeometry = new THREE.PlaneGeometry( 500, 500 );
     const planeMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff } );
 
-    const ground = new THREE.Mesh( planeGeometry, planeMaterial );
 
-    ground.position.set( 0, 0, 0);
-    ground.rotation.x = Math.PI * -.5;
+    if (this.options.ground) {
+      const ground = new THREE.Mesh( planeGeometry, planeMaterial );
 
-    ground.castShadow = false;
-    ground.receiveShadow = true;
+      ground.position.set( 0, 0, 0);
+      ground.rotation.x = Math.PI * -.5;
 
-    this.scene.add( ground );
+      ground.castShadow = false;
+      ground.receiveShadow = true;
+
+      this.scene.add( ground );
+    }
+    
 
     const fov = 45;
     const aspect = 2;  // the canvas default
@@ -58,6 +69,8 @@ class FloppyStage {
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     this.camera.position.set(0, 25, 0);
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+    this.camera.aspect = this.container.offsetWidth / this.container.offsetHeight;
+		this.camera.updateProjectionMatrix();
 
     const ambient = new THREE.AmbientLight( 0xcccccc );
 	  this.scene.add( ambient );
@@ -75,7 +88,8 @@ class FloppyStage {
     this.floppy = new FloppyObject({ x: 8, y: 0.6, z: 8});
     this.scene.add(this.floppy.mesh);
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: !this.options.background });
+    this.renderer.setClearColor( 0x000000, 0 );
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.setPixelRatio( window.devicePixelRatio );

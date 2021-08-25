@@ -7,11 +7,14 @@ const Example = () => {
   const containerEl = useRef();
 
   useEffect(() => {
-    new FloppyStage();
+    new FloppyStage(containerEl.current, {
+      ground: false,
+      background: false
+    });
   }, []);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}}></div>
+    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl}></div>
   )
 }
 
