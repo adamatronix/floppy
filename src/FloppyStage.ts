@@ -1,15 +1,29 @@
 import * as THREE from 'three';
 import FloppyObject from './FloppyObject';
 
+interface Origin {
+  x: number;
+  y: number;
+}
+
 class FloppyStage {
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
   renderer: THREE.WebGLRenderer;
   container: HTMLDivElement;
+  origin: Origin;
+  floppy: FloppyObject;
 
   constructor() {
     this.setupWorld();
+    this.setupEvents();
     this.renderFrame();
+  }
+
+  setupEvents = () => {
+    document.body.addEventListener("mousemove", this.onMouseMove.bind(this));
+    document.body.addEventListener("mouseenter", this.onMouseEnter.bind(this));
+    document.body.addEventListener("mouseleave", this.onMouseLeave.bind(this));
   }
 
   setupWorld = () => {
@@ -20,6 +34,7 @@ class FloppyStage {
     this.container.style.top = '0';
     this.container.style.left = '0';
     document.body.appendChild(this.container);
+    this.origin = { x: this.container.offsetWidth/2, y: this.container.offsetHeight/2 };
 
     this.scene = new THREE.Scene();
 
@@ -57,8 +72,8 @@ class FloppyStage {
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
 
-    const floppy = new FloppyObject({ x: 8, y: 0.6, z: 8});
-    this.scene.add(floppy.mesh);
+    this.floppy = new FloppyObject({ x: 8, y: 0.6, z: 8});
+    this.scene.add(this.floppy.mesh);
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.shadowMap.enabled = true;
@@ -73,6 +88,39 @@ class FloppyStage {
     this.renderer.render( this.scene, this.camera );
     requestAnimationFrame(this.renderFrame);
   }
+
+  /**
+   * On mouse move trigger a tween to the current mouse position.
+   * 
+   * @param {object} e Mouse event 
+   */ 
+   onMouseMove = (e: MouseEvent) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    const posX = x - this.origin.x;
+    const posY = y - this.origin.y;
+
+    console.log(`(${posX},${posY})`)
+
+  }
+
+  /**
+   * On the mouse entering the document, reveal the cursor
+   * 
+   * @param {*} e Mouse event
+   */
+   onMouseEnter = (e: MouseEvent) => {
+
+    }
+
+    /**
+     * On mouse leaving the document, hide the cursor
+     * 
+     * @param {*} e 
+     */
+    onMouseLeave = (e: MouseEvent) =>  {
+    }
+
 
 }
 
