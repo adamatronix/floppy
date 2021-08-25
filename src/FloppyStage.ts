@@ -100,7 +100,23 @@ class FloppyStage {
     const posX = x - this.origin.x;
     const posY = y - this.origin.y;
 
-    console.log(`(${posX},${posY})`)
+    //console.log(`(${posX},${posY})`)
+
+    if(-400 < posX && posX < 400) {
+      let range = 400 - (-400);
+      let adjustedX = posX + 400;
+      let percent = adjustedX / range;
+      let movement = percent * 1.5;
+      this.floppy.mesh.rotation.z = -0.75 + movement;
+    }
+
+    if(-400 < posY && posY < 400) {
+      let range = 400 - (-400);
+      let adjustedY = posY + 400;
+      let percent = adjustedY / range;
+      let movement = percent * 1.5;
+      this.floppy.mesh.rotation.x = -0.75 + movement;
+    }
 
   }
 
