@@ -20,7 +20,8 @@ class FloppyStage {
   floppy: FloppyObject;
 
 
-  constructor(options?: LooseObject) {
+  constructor(el: HTMLDivElement, options?: LooseObject) {
+    this.container = el;
     this.options = {
       ground: true,
       background: true
@@ -40,13 +41,6 @@ class FloppyStage {
   }
 
   setupWorld = () => {
-    this.container = document.createElement('div');
-    this.container.style.width = '100%';
-    this.container.style.height = '100vh';
-    this.container.style.position = 'absolute';
-    this.container.style.top = '0';
-    this.container.style.left = '0';
-    document.body.appendChild(this.container);
     this.origin = { x: this.container.offsetWidth/2, y: this.container.offsetHeight/2 };
 
     this.scene = new THREE.Scene();
