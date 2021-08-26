@@ -1,5 +1,7 @@
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import FloppyObject from './FloppyObject';
+import flopp from './assets/floppy.glb';
 
 interface Origin {
   x: number;
@@ -29,9 +31,21 @@ class FloppyStage {
 
     this.options = { ...this.options, ...options};
 
+    console.log(flopp);
+
     this.setupWorld();
     this.setupEvents();
+    //this.addMesh();
     this.renderFrame();
+  }
+
+  addMesh = () => {
+    const self = this;
+    const loader = new GLTFLoader();
+    loader.load('/assets/models/floppy.glb', function ( gltf ) {
+
+      self.scene.add( gltf.scene );
+    } );
   }
 
   setupEvents = () => {
