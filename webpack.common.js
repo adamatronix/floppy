@@ -44,11 +44,7 @@ module.exports = {
         },
         {
           test: /\.(obj|fbx|glb|gltf)$/,
-          loader: 'url-loader',
-          options:
-          {
-              outputPath: '/assets/models/'
-          }
+          loader: 'url-loader'
         }
     ]
   },

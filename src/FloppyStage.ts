@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import FloppyObject from './FloppyObject';
-import flopp from './assets/floppy.glb';
+import FloppyAlbum from './FloppyAlbum';
+import seensoundTexture from './assets/seensounds-uvmap_rotationADAM.png';
 
 interface Origin {
   x: number;
@@ -19,7 +19,7 @@ class FloppyStage {
   renderer: THREE.WebGLRenderer;
   container: HTMLDivElement;
   origin: Origin;
-  floppy: FloppyObject;
+  floppy: FloppyAlbum;
 
 
   constructor(el: HTMLDivElement, options?: LooseObject) {
@@ -31,21 +31,9 @@ class FloppyStage {
 
     this.options = { ...this.options, ...options};
 
-    console.log(flopp);
-
     this.setupWorld();
     this.setupEvents();
-    //this.addMesh();
     this.renderFrame();
-  }
-
-  addMesh = () => {
-    const self = this;
-    const loader = new GLTFLoader();
-    loader.load('/assets/models/floppy.glb', function ( gltf ) {
-
-      self.scene.add( gltf.scene );
-    } );
   }
 
   setupEvents = () => {
@@ -99,8 +87,9 @@ class FloppyStage {
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
 
-    this.floppy = new FloppyObject({ x: 8, y: 0.6, z: 8});
-    this.scene.add(this.floppy.mesh);
+    this.floppy = new FloppyAlbum(seensoundTexture, (mesh: THREE.Group) => {
+      this.scene.add(mesh);
+    });
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: !this.options.background });
     this.renderer.setClearColor( 0x000000, 0 );
@@ -135,7 +124,10 @@ class FloppyStage {
       let adjustedX = posX + 400;
       let percent = adjustedX / range;
       let movement = percent * 1.5;
-      this.floppy.mesh.rotation.z = -0.75 + movement;
+      if(this.floppy && this.floppy.mesh) {
+
+        this.floppy.mesh.rotation.y = 0.75 - movement;
+      }
     }
 
     if(-400 < posY && posY < 400) {
@@ -143,7 +135,9 @@ class FloppyStage {
       let adjustedY = posY + 400;
       let percent = adjustedY / range;
       let movement = percent * 1.5;
-      this.floppy.mesh.rotation.x = -0.75 + movement;
+      if(this.floppy && this.floppy.mesh) {
+        this.floppy.mesh.rotation.x = ((Math.PI * .5) - 0.75) + movement;
+      }
     }
 
   }
