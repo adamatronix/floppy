@@ -43,7 +43,7 @@ module.exports = {
           ]
         },
         {
-          test: /\.(obj|fbx)$/,
+          test: /\.(obj|fbx|glb|gltf)$/,
           loader: 'url-loader'
         }
     ]
