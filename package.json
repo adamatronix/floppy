@@ -15,6 +15,7 @@
     "@babel/core": "^7.9.0",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/preset-env": "^7.9.5",
+    "@types/reach__router": "^1.3.9",
     "@types/react": "^17.0.14",
     "@types/react-dom": "^17.0.9",
     "babel-loader": "^8.1.0",
@@ -35,6 +36,7 @@
     "webpack-obj-loader": "^1.0.4"
   },
   "dependencies": {
+    "@reach/router": "^1.3.4",
     "@types/three": "^0.130.0",
     "file-loader": "^6.2.0",
     "react": "^17.0.2",
