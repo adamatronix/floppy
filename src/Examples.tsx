@@ -2,12 +2,14 @@ import React, { useRef, useEffect } from 'react';
 import { render } from 'react-dom';
 import { Router, RouteComponentProps, Link } from "@reach/router";
 import FloppyStage from './FloppyStage';
+import seensoundTexture from './assets/seensounds-uvmap_rotationADAM.png';
+import minimeTexture from './assets/minime-uvmap.png';
 
 const Standard = (props: RouteComponentProps) =>  {
   const containerEl = useRef();
 
   useEffect(() => {
-    new FloppyStage(containerEl.current, {
+    new FloppyStage(containerEl.current, minimeTexture, {
       ground: false,
       background: false
     });
@@ -24,12 +26,12 @@ const Multi = (props: RouteComponentProps) =>  {
   const containerEl2 = useRef();
 
   useEffect(() => {
-    new FloppyStage(containerEl.current, {
+    new FloppyStage(containerEl.current,minimeTexture, {
       ground: false,
       background: false
     });
 
-    new FloppyStage(containerEl2.current, {
+    new FloppyStage(containerEl2.current,minimeTexture, {
       ground: false,
       background: false
     });

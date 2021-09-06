@@ -20,10 +20,12 @@ class FloppyStage {
   container: HTMLDivElement;
   origin: Origin;
   floppy: FloppyAlbum;
+  texture:string;
 
 
-  constructor(el: HTMLDivElement, options?: LooseObject) {
+  constructor(el: HTMLDivElement, texture:string, options?: LooseObject) {
     this.container = el;
+    this.texture = texture;
     this.options = {
       ground: true,
       background: true
@@ -87,7 +89,7 @@ class FloppyStage {
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
 
-    this.floppy = new FloppyAlbum(seensoundTexture, (mesh: THREE.Group) => {
+    this.floppy = new FloppyAlbum(this.texture, (mesh: THREE.Group) => {
       this.scene.add(mesh);
     });
 
