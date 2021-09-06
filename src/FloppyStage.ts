@@ -19,7 +19,7 @@ class FloppyStage {
   renderer: THREE.WebGLRenderer;
   container: HTMLDivElement;
   origin: Origin;
-  floppy: FloppyAlbum;
+  floppy: any;
   texture:string;
 
 
@@ -28,7 +28,8 @@ class FloppyStage {
     this.texture = texture;
     this.options = {
       ground: true,
-      background: true
+      background: true,
+      trailEffect: false
     }
 
     this.options = { ...this.options, ...options};
@@ -89,21 +90,27 @@ class FloppyStage {
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
 
-    this.floppy = new FloppyAlbum(this.texture, (mesh: THREE.Group) => {
-      this.scene.add(mesh);
-    });
+    this.floppy = new FloppyObject({x:12,y:14.70,z:5}, this.texture);
+    this.scene.add(this.floppy.mesh);
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: !this.options.background });
+    /*this.floppy = new FloppyAlbum(this.texture, (mesh: THREE.Group) => {
+      this.scene.add(mesh);
+    });*/
+
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: !this.options.background, preserveDrawingBuffer: this.options.trailEffect ? true : false});
     this.renderer.setClearColor( 0x000000, 0 );
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
+    this.renderer.autoClear = this.options.trailEffect ? false : true;
+    this.renderer.clear();
     this.renderer.setPixelRatio( window.devicePixelRatio );
     this.renderer.setSize( this.container.offsetWidth, this.container.offsetHeight );
     this.container.appendChild( this.renderer.domElement );
   }
 
   renderFrame = () => {
-    this.renderer.clear();
+    this.renderer.clear(this.options.trailEffect ? false : true);
+    
     this.renderer.render( this.scene, this.camera );
     requestAnimationFrame(this.renderFrame);
   }

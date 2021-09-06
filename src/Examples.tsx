@@ -4,14 +4,16 @@ import { Router, RouteComponentProps, Link } from "@reach/router";
 import FloppyStage from './FloppyStage';
 import seensoundTexture from './assets/seensounds-uvmap_rotationADAM.png';
 import minimeTexture from './assets/minime-uvmap.png';
+import minimeNonWrapped from './assets/MiniMe_Section4_01_DT.jpg';
 
 const Standard = (props: RouteComponentProps) =>  {
   const containerEl = useRef();
 
   useEffect(() => {
-    new FloppyStage(containerEl.current, minimeTexture, {
+    new FloppyStage(containerEl.current, minimeNonWrapped, {
       ground: false,
-      background: false
+      background: false,
+      trailEffect: false
     });
   }, []);
 
