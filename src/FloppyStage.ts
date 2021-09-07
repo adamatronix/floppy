@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { gsap } from "gsap";
 import FloppyObject from './FloppyObject';
 import FloppyAlbum from './FloppyAlbum';
 import seensoundTexture from './assets/seensounds-uvmap_rotationADAM.png';
@@ -93,7 +94,7 @@ class FloppyStage {
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
 
-    this.floppy = new FloppyObject({x:12,y:14.70,z:5}, this.texture);
+    this.floppy = new FloppyObject({x:12,y:14.70,z:3}, this.texture);
     this.scene.add(this.floppy.mesh);
 
     /*this.floppy = new FloppyAlbum(this.texture, (mesh: THREE.Group) => {
@@ -131,8 +132,14 @@ class FloppyStage {
       let percent = adjustedX / range;
       let movement = percent * 1.5;
       if(this.floppy && this.floppy.mesh) {
+        gsap.to(this.floppy.mesh.rotation, 
+          { 
+            duration: .8,
+            y:  0.75 - movement,
+          }
+        );
 
-        this.floppy.mesh.rotation.y = 0.75 - movement;
+        //this.floppy.mesh.rotation.y = 0.75 - movement;
       }
     }
 
@@ -142,7 +149,13 @@ class FloppyStage {
       let percent = adjustedY / range;
       let movement = percent * 1.5;
       if(this.floppy && this.floppy.mesh) {
-        this.floppy.mesh.rotation.x = ((Math.PI * .5) - 0.75) + movement;
+        gsap.to(this.floppy.mesh.rotation, 
+          { 
+            duration: .8,
+            x:  ((Math.PI * .5) - 0.75) + movement,
+          }
+        );
+        //this.floppy.mesh.rotation.x = ((Math.PI * .5) - 0.75) + movement;
       }
     }
 
