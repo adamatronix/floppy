@@ -23,11 +23,13 @@ class FloppyStage {
   cachedMouse: Origin;
   floppy: any;
   texture:string;
+  dimensions:any;
 
 
-  constructor(el: HTMLDivElement, texture:string, options?: LooseObject) {
+  constructor(el: HTMLDivElement, texture:string, dimensions:any, options?: LooseObject) {
     this.container = el;
     this.texture = texture;
+    this.dimensions = dimensions;
     this.options = {
       ground: true,
       background: true,
@@ -95,7 +97,7 @@ class FloppyStage {
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
 
-    this.floppy = new FloppyObject({x:12,y:14.70,z:3}, this.texture, this.options.tickerColour);
+    this.floppy = new FloppyObject(this.dimensions, this.texture, this.options.tickerColour);
     this.scene.add(this.floppy.mesh);
 
     /*this.floppy = new FloppyAlbum(this.texture, (mesh: THREE.Group) => {
