@@ -19,14 +19,18 @@ class FloppyStage {
   renderer: THREE.WebGLRenderer;
   container: HTMLDivElement;
   origin: Origin;
-  floppy: FloppyAlbum;
+  cachedMouse: Origin;
+  floppy: any;
+  texture:string;
 
 
-  constructor(el: HTMLDivElement, options?: LooseObject) {
+  constructor(el: HTMLDivElement, texture:string, options?: LooseObject) {
     this.container = el;
+    this.texture = texture;
     this.options = {
       ground: true,
-      background: true
+      background: true,
+      trailEffect: false
     }
 
     this.options = { ...this.options, ...options};
@@ -40,10 +44,12 @@ class FloppyStage {
     document.body.addEventListener("mousemove", this.onMouseMove.bind(this));
     document.body.addEventListener("mouseenter", this.onMouseEnter.bind(this));
     document.body.addEventListener("mouseleave", this.onMouseLeave.bind(this));
+    window.addEventListener("scroll", this.onScroll.bind(this));
   }
 
   setupWorld = () => {
-    this.origin = { x: this.container.offsetWidth/2, y: this.container.offsetHeight/2 };
+    const bounding = this.container.getBoundingClientRect();
+    this.origin = { x: bounding.x + this.container.offsetWidth/2, y: bounding.y + this.container.offsetHeight/2 };
 
     this.scene = new THREE.Scene();
 
@@ -87,33 +93,33 @@ class FloppyStage {
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
 
-    this.floppy = new FloppyAlbum(seensoundTexture, (mesh: THREE.Group) => {
-      this.scene.add(mesh);
-    });
+    this.floppy = new FloppyObject({x:12,y:14.70,z:5}, this.texture);
+    this.scene.add(this.floppy.mesh);
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: !this.options.background });
+    /*this.floppy = new FloppyAlbum(this.texture, (mesh: THREE.Group) => {
+      this.scene.add(mesh);
+    });*/
+
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: !this.options.background, preserveDrawingBuffer: this.options.trailEffect ? true : false});
     this.renderer.setClearColor( 0x000000, 0 );
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
+    this.renderer.autoClear = this.options.trailEffect ? false : true;
+    this.renderer.clear();
     this.renderer.setPixelRatio( window.devicePixelRatio );
     this.renderer.setSize( this.container.offsetWidth, this.container.offsetHeight );
     this.container.appendChild( this.renderer.domElement );
   }
 
   renderFrame = () => {
-    this.renderer.clear();
+    this.renderer.clear(this.options.trailEffect ? false : true);
+    
     this.renderer.render( this.scene, this.camera );
     requestAnimationFrame(this.renderFrame);
   }
 
-  /**
-   * On mouse move trigger a tween to the current mouse position.
-   * 
-   * @param {object} e Mouse event 
-   */ 
-   onMouseMove = (e: MouseEvent) => {
-    const x = e.clientX;
-    const y = e.clientY;
+  moveObject = (x:number,y:number) => {
+
     const posX = x - this.origin.x;
     const posY = y - this.origin.y;
 
@@ -140,6 +146,28 @@ class FloppyStage {
       }
     }
 
+  }
+
+  onScroll = () => {
+    const bounding = this.container.getBoundingClientRect();
+    this.origin = { x: bounding.x + this.container.offsetWidth/2, y: bounding.y + this.container.offsetHeight/2 };    
+
+    if(this.cachedMouse) {
+      this.moveObject(this.cachedMouse.x, this.cachedMouse.y);
+    }
+    
+  }
+
+  /**
+   * On mouse move trigger a tween to the current mouse position.
+   * 
+   * @param {object} e Mouse event 
+   */ 
+   onMouseMove = (e: MouseEvent) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    this.moveObject(x,y);
+    this.cachedMouse = { x:x, y:y };
   }
 
   /**
