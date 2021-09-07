@@ -26,14 +26,26 @@ const Standard = (props: RouteComponentProps) =>  {
 const Multi = (props: RouteComponentProps) =>  {
   const containerEl = useRef();
   const containerEl2 = useRef();
+  const containerEl3 = useRef();
+  const containerEl4 = useRef();
 
   useEffect(() => {
-    new FloppyStage(containerEl.current,minimeTexture, {
+    new FloppyStage(containerEl.current, minimeNonWrapped, {
       ground: false,
       background: false
     });
 
-    new FloppyStage(containerEl2.current,minimeTexture, {
+    new FloppyStage(containerEl2.current, minimeNonWrapped, {
+      ground: false,
+      background: false
+    });
+
+    new FloppyStage(containerEl3.current, minimeNonWrapped, {
+      ground: false,
+      background: false
+    });
+
+    new FloppyStage(containerEl4.current, minimeNonWrapped, {
       ground: false,
       background: false
     });
@@ -41,8 +53,12 @@ const Multi = (props: RouteComponentProps) =>  {
 
   return (
     <>
-    <div style={{ width: '100vw', height: '50vh', overflow: 'hidden'}} ref={containerEl}></div>
-    <div style={{ width: '100vw', height: '50vh', overflow: 'hidden'}} ref={containerEl2}></div>
+    <div style={{display:'flex', justifyContent: 'flex-end'}}>
+      <div style={{ width: '50vw', height: '80vh', overflow: 'hidden'}} ref={containerEl}></div>
+    </div>
+    <div style={{ width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl2}></div>
+    <div style={{ width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl3}></div>
+    <div style={{ width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl4}></div>
     </>
   )
 

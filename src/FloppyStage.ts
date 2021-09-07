@@ -19,6 +19,7 @@ class FloppyStage {
   renderer: THREE.WebGLRenderer;
   container: HTMLDivElement;
   origin: Origin;
+  cachedMouse: Origin;
   floppy: any;
   texture:string;
 
@@ -43,10 +44,12 @@ class FloppyStage {
     document.body.addEventListener("mousemove", this.onMouseMove.bind(this));
     document.body.addEventListener("mouseenter", this.onMouseEnter.bind(this));
     document.body.addEventListener("mouseleave", this.onMouseLeave.bind(this));
+    window.addEventListener("scroll", this.onScroll.bind(this));
   }
 
   setupWorld = () => {
-    this.origin = { x: this.container.offsetWidth/2, y: this.container.offsetHeight/2 };
+    const bounding = this.container.getBoundingClientRect();
+    this.origin = { x: bounding.x + this.container.offsetWidth/2, y: bounding.y + this.container.offsetHeight/2 };
 
     this.scene = new THREE.Scene();
 
@@ -115,14 +118,8 @@ class FloppyStage {
     requestAnimationFrame(this.renderFrame);
   }
 
-  /**
-   * On mouse move trigger a tween to the current mouse position.
-   * 
-   * @param {object} e Mouse event 
-   */ 
-   onMouseMove = (e: MouseEvent) => {
-    const x = e.clientX;
-    const y = e.clientY;
+  moveObject = (x:number,y:number) => {
+
     const posX = x - this.origin.x;
     const posY = y - this.origin.y;
 
@@ -149,6 +146,28 @@ class FloppyStage {
       }
     }
 
+  }
+
+  onScroll = () => {
+    const bounding = this.container.getBoundingClientRect();
+    this.origin = { x: bounding.x + this.container.offsetWidth/2, y: bounding.y + this.container.offsetHeight/2 };    
+
+    if(this.cachedMouse) {
+      this.moveObject(this.cachedMouse.x, this.cachedMouse.y);
+    }
+    
+  }
+
+  /**
+   * On mouse move trigger a tween to the current mouse position.
+   * 
+   * @param {object} e Mouse event 
+   */ 
+   onMouseMove = (e: MouseEvent) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    this.moveObject(x,y);
+    this.cachedMouse = { x:x, y:y };
   }
 
   /**
