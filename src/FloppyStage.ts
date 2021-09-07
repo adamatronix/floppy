@@ -31,7 +31,8 @@ class FloppyStage {
     this.options = {
       ground: true,
       background: true,
-      trailEffect: false
+      trailEffect: false,
+      tickerColour: '#FFF'
     }
 
     this.options = { ...this.options, ...options};
@@ -94,7 +95,7 @@ class FloppyStage {
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
 
-    this.floppy = new FloppyObject({x:12,y:14.70,z:3}, this.texture);
+    this.floppy = new FloppyObject({x:12,y:14.70,z:3}, this.texture, this.options.tickerColour);
     this.scene.add(this.floppy.mesh);
 
     /*this.floppy = new FloppyAlbum(this.texture, (mesh: THREE.Group) => {

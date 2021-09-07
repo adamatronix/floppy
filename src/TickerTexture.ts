@@ -14,16 +14,18 @@ class TickerTexture {
   curPosition:Origin = {x:null,y:null, isFlanked: false};
   imageArray:any = new Array();
   orientation:string;
+  tickerColour:string;
 
-  constructor(orientation:string) {
+  constructor(orientation:string, ticketColour:string) {
    const self = this;
    this.orientation = orientation;
+   this.tickerColour = ticketColour;
    this.canvas = document.createElement('canvas');
    //document.body.appendChild(this.canvas);
    this.ctx = this.canvas.getContext('2d'); 
    this.ctx.canvas.width =  this.orientation === 'vertical' ? 200 : 1400;
    this.ctx.canvas.height = this.orientation === 'vertical' ? 1400 : 200;
-   this.ctx.fillStyle = '#FB3B5B';
+   this.ctx.fillStyle = this.tickerColour;
    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
    let x = this.orientation === 'vertical' ? 0 : 0 - (2575 - self.canvas.width);
@@ -43,7 +45,7 @@ class TickerTexture {
 
   update = () => {
     this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
-    this.ctx.fillStyle = '#FB3B5B';
+    this.ctx.fillStyle = this.tickerColour;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.imageArray.forEach((image:Origin, index:number) => {

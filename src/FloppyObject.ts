@@ -13,11 +13,12 @@ class FloppyObject {
   tickerHorizontal:TickerTexture;
   tickerText:CanvasTexture;
   tickerTextHorizontal:CanvasTexture;
+  tickerColour:string
 
-  constructor(boxDimensions: LooseObject, image: string) {
+  constructor(boxDimensions: LooseObject, image: string, tickerColour:string) {
     this.image = image;
-    this.ticker = new TickerTexture('vertical');
-    this.tickerHorizontal = new TickerTexture('horizontal');
+    this.ticker = new TickerTexture('vertical',tickerColour);
+    this.tickerHorizontal = new TickerTexture('horizontal',tickerColour);
     this.createShape(boxDimensions);
   }
 

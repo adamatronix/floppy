@@ -68,7 +68,7 @@ const Multi = (props: RouteComponentProps) =>  {
 const Ticker = (props: RouteComponentProps) =>  {
 
   useEffect(() => {
-    new TickerTexture('vertical');
+    new TickerTexture('vertical', "#FFF");
   }, []);
 
   return (
