@@ -114,6 +114,8 @@ class FloppyStage {
 
   renderFrame = () => {
     this.renderer.clear(this.options.trailEffect ? false : true);
+    this.floppy.tickerText.needsUpdate = true;
+    this.floppy.tickerTextHorizontal.needsUpdate = true;
     
     this.renderer.render( this.scene, this.camera );
     requestAnimationFrame(this.renderFrame);

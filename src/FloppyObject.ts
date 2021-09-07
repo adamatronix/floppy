@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { CanvasTexture } from 'three';
+import TickerTexture from './TickerTexture';
 
 interface LooseObject {
   [key: string]: any
@@ -7,24 +9,34 @@ interface LooseObject {
 class FloppyObject { 
   mesh: THREE.Mesh;
   image:string;
+  ticker:TickerTexture;
+  tickerHorizontal:TickerTexture;
+  tickerText:CanvasTexture;
+  tickerTextHorizontal:CanvasTexture;
 
   constructor(boxDimensions: LooseObject, image: string) {
     this.image = image;
+    this.ticker = new TickerTexture('vertical');
+    this.tickerHorizontal = new TickerTexture('horizontal');
     this.createShape(boxDimensions);
   }
 
   createShape = (boxDimensions: LooseObject) => {
     const texture = new THREE.TextureLoader().load(this.image);
+    this.tickerText = new THREE.CanvasTexture(this.ticker.canvas);
+    this.tickerTextHorizontal = new THREE.CanvasTexture(this.tickerHorizontal.canvas);
+    //this.tickerText.repeat.set(0.008, 1);
+    
     // Create an array of materials to be used in a cube, one for each side
     const cubeMaterialArray = [];
 
     // order to add materials: x+,x-,y+,y-,z+,z-
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerText } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerText } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerTextHorizontal } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerTextHorizontal } ) );
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xACD2DD } ) );
-    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xACD2DD } ) );
-    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xACD2DD } ) );
-    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xACD2DD } ) );
-    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xACD2DD } ) );
-    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: texture } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: texture  } ) );
 
     const cubeGeo = new THREE.BoxGeometry(boxDimensions.x, boxDimensions.y, boxDimensions.z);
     const cubeMat = new THREE.MeshPhongMaterial({color: '#ACD2DD'});

@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { render } from 'react-dom';
 import { Router, RouteComponentProps, Link } from "@reach/router";
 import FloppyStage from './FloppyStage';
+import TickerTexture from './TickerTexture';
 import seensoundTexture from './assets/seensounds-uvmap_rotationADAM.png';
 import minimeTexture from './assets/minime-uvmap.png';
 import minimeNonWrapped from './assets/MiniMe_Section4_01_DT.jpg';
@@ -64,6 +65,18 @@ const Multi = (props: RouteComponentProps) =>  {
 
 }
 
+const Ticker = (props: RouteComponentProps) =>  {
+
+  useEffect(() => {
+    new TickerTexture('vertical');
+  }, []);
+
+  return (
+    <></>
+  )
+
+}
+
 
 
 const Example = () => {
@@ -72,6 +85,7 @@ const Example = () => {
     <Router>
       <Standard path="/" />
       <Multi path="/multiple" />
+      <Ticker path="/tickertexture" />
     </Router>
   )
   
