@@ -1,5 +1,5 @@
-import { Boilerplate } from './Boilerplate';
+import FloppyStage from './FloppyStage';
 
 export {
-  Boilerplate
+  FloppyStage
 }

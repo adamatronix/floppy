@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "typeRoots" : ["node_modules/@types", "src/types"],
     "outDir": "./lib/",
     "noImplicitAny": true,
     "module": "es6",
@@ -8,6 +7,10 @@
     "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true
-  }
+    "allowSyntheticDefaultImports": true,
+    "declaration": true
+  },
+  "include": [
+    "src/types"
+  ]
 }
