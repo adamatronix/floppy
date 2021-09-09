@@ -11,8 +11,7 @@
     "develop": "webpack --mode development --config webpack.common.js",
     "clean": "rimraf lib",
     "start": "webpack-dev-server --open --config webpack.dev.js",
-    "build": "npm run clean && GENERATE_SOURCEMAP=false webpack --config webpack.prod.js",
-    "tscbuild": "npm run clean && tsc && npm run postbuild",
+    "build": "npm run clean && tsc && npm run postbuild",
     "postbuild": "npm run copy-files",
     "deploy": "gh-pages -d lib",
     "copy-files": "copyfiles -u 1 \"src/assets/*.{png,jpg}\" lib"
