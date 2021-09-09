@@ -1,16 +1,19 @@
 {
   "compilerOptions": {
-    "outDir": "./lib/",
+    "outDir": "lib",
     "noImplicitAny": true,
     "module": "es6",
     "target": "es5",
+    "lib": [ "es2015", "dom" ],
     "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "declaration": true
+    "declaration": true,
+    "sourceMap": true
   },
   "include": [
-    "src/types"
+    "src/types",
+    "src/*.ts"
   ]
 }
