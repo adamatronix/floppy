@@ -43,11 +43,16 @@ const Multi = (props: RouteComponentProps) =>  {
       tickerColour: '#FB3B5B'
     });
 
-    new FloppyStage(containerEl3.current, minimeImage3, {x:13,y:15.98,z:3}, {
+    const test = new FloppyStage(containerEl3.current, minimeImage3, {x:13,y:15.98,z:3}, {
       ground: false,
       background: false,
       tickerColour: '#F57491'
     });
+
+
+    return function cleanup() {
+      test.destroy();
+    };
 
   }, []);
 

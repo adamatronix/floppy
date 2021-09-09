@@ -46,8 +46,6 @@ class FloppyStage {
 
   setupEvents = () => {
     document.body.addEventListener("mousemove", this.onMouseMove.bind(this));
-    document.body.addEventListener("mouseenter", this.onMouseEnter.bind(this));
-    document.body.addEventListener("mouseleave", this.onMouseLeave.bind(this));
     window.addEventListener("scroll", this.onScroll.bind(this));
   }
 
@@ -188,23 +186,11 @@ class FloppyStage {
     this.cachedMouse = { x:x, y:y };
   }
 
-  /**
-   * On the mouse entering the document, reveal the cursor
-   * 
-   * @param {*} e Mouse event
-   */
-   onMouseEnter = (e: MouseEvent) => {
-
-    }
-
-    /**
-     * On mouse leaving the document, hide the cursor
-     * 
-     * @param {*} e 
-     */
-    onMouseLeave = (e: MouseEvent) =>  {
-    }
-
+  destroy = () => {
+    this.container.innerHTML = '';
+    document.body.removeEventListener("mousemove", this.onMouseMove.bind(this));
+    window.removeEventListener("scroll", this.onScroll.bind(this));
+  }
 
 }
 
