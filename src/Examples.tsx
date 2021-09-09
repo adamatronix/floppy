@@ -32,7 +32,7 @@ const Multi = (props: RouteComponentProps) =>  {
   const containerEl3 = useRef();
 
   useEffect(() => {
-    new FloppyStage(containerEl.current, minimeNonWrapped, {x:12,y:14.70,z:3}, {
+    new FloppyStage(containerEl.current, minimeNonWrapped, {x:12,y:17.70,z:3}, {
       ground: false,
       background: false
     });
@@ -59,7 +59,7 @@ const Multi = (props: RouteComponentProps) =>  {
   return (
     <>
     <div style={{display:'flex', justifyContent: 'flex-end'}}>
-      <div style={{ width: '50vw', height: '80vh', overflow: 'hidden'}} ref={containerEl}></div>
+      <div style={{ width: '40vw', height: '100vh', overflow: 'hidden'}} ref={containerEl}></div>
     </div>
     <div style={{ width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl2}></div>
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl3}></div>
