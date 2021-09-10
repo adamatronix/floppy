@@ -17,7 +17,8 @@ const Standard = (props: RouteComponentProps) =>  {
     example.current = new FloppyStage(containerEl.current, minimeNonWrapped, {x:12,y:14.70,z:3}, {
       ground: false,
       background: false,
-      trailEffect: false,
+      trailEffect: true,
+      elastic: false,
       stats: true
     });
     
