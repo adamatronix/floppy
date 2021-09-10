@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import Stats from 'three/examples/jsm/libs/stats.module';
 import FloppyObject from './FloppyObject';
 import { findPointBetweenTwo } from './utils/findPointBetweenTwo';
+import { distanceOfLine } from './utils/distanceOfLine';
 
 interface Origin {
   x: number;
@@ -26,6 +27,7 @@ class FloppyStage {
   dimensions:any;
   stats:Stats;
   requestId:number;
+  punctured:boolean = false;
   intersectionObserver:IntersectionObserver;
 
   constructor(el: HTMLDivElement, texture:string, dimensions:any, options?: LooseObject) {
@@ -38,7 +40,8 @@ class FloppyStage {
       trailEffect: false,
       tickerColour: '#FFF',
       elastic: false,
-      stats: false
+      stats: false,
+      puncturable: false
     }
 
     this.options = { ...this.options, ...options};
@@ -171,6 +174,15 @@ class FloppyStage {
   moveObject = (x:number,y:number) => {
     const posX = x - this.origin.x;
     const posY = y - this.origin.y;
+    
+    if(this.options.puncturable && !this.punctured) {
+      const proximity = distanceOfLine(0,0,posX,posY);
+      if(proximity < this.options.puncturable) 
+        this.punctured = true;
+
+      return;
+    }
+      
 
     if(this.options.elastic) {
       const distance = findPointBetweenTwo(0.002,0,0,posX,posY);
