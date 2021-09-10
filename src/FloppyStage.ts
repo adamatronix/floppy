@@ -27,6 +27,7 @@ class FloppyStage {
   dimensions:any;
   stats:Stats;
   requestId:number;
+  intersectionObserver:IntersectionObserver;
 
   constructor(el: HTMLDivElement, texture:string, dimensions:any, options?: LooseObject) {
     this.container = el;
@@ -44,12 +45,26 @@ class FloppyStage {
     this.stats = this.options.stats ? this.setupStats() : null;
     this.setupWorld();
     this.setupEvents();
-    this.startRender();
+    this.setupObserver();
   }
 
   setupEvents = () => {
     document.body.addEventListener("mousemove", this.onMouseMove);
     window.addEventListener("scroll", this.onScroll);
+  }
+
+  setupObserver = () => {
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.startRender();
+        } else {
+          this.stopRender();
+        }
+      });     
+   });
+
+   this.intersectionObserver.observe(this.container);
   }
 
   setupStats = () => {
