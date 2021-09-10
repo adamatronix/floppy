@@ -48,8 +48,8 @@ class FloppyStage {
   }
 
   setupEvents = () => {
-    document.body.addEventListener("mousemove", this.onMouseMove.bind(this));
-    window.addEventListener("scroll", this.onScroll.bind(this));
+    document.body.addEventListener("mousemove", this.onMouseMove);
+    window.addEventListener("scroll", this.onScroll);
   }
 
   setupStats = () => {
@@ -143,16 +143,17 @@ class FloppyStage {
     this.requestId = undefined;
     this.floppy.ticker.stopRender();
     this.floppy.tickerHorizontal.stopRender();
+    this.destroyEvents();
   }
 
   startRender = () => {
     this.renderFrame();
     this.floppy.ticker.startRender();
     this.floppy.tickerHorizontal.startRender();
+    this.setupEvents();
   }
 
   moveObject = (x:number,y:number) => {
-
     const posX = x - this.origin.x;
     const posY = y - this.origin.y;
 
@@ -215,10 +216,14 @@ class FloppyStage {
     this.cachedMouse = { x:x, y:y };
   }
 
+  destroyEvents = () => {
+    document.body.removeEventListener("mousemove", this.onMouseMove);
+    window.removeEventListener("scroll", this.onScroll);
+  }
+
   destroy = () => {
     this.container.innerHTML = '';
-    document.body.removeEventListener("mousemove", this.onMouseMove.bind(this));
-    window.removeEventListener("scroll", this.onScroll.bind(this));
+    this.destroyEvents();
   }
 
 }
