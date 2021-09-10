@@ -20,6 +20,7 @@ class FloppyObject {
     this.ticker = new TickerTexture('vertical',tickerColour);
     this.tickerHorizontal = new TickerTexture('horizontal',tickerColour);
     this.createShape(boxDimensions);
+    console.log('Floppy Object constructor');
   }
 
   createShape = (boxDimensions: LooseObject) => {
@@ -36,8 +37,9 @@ class FloppyObject {
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerText } ) );
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerTextHorizontal } ) );
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerTextHorizontal } ) );
-    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xACD2DD } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF } ) );
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: texture  } ) );
+    
 
     const cubeGeo = new THREE.BoxGeometry(boxDimensions.x, boxDimensions.y, boxDimensions.z);
     const cubeMat = new THREE.MeshPhongMaterial({color: '#ACD2DD'});

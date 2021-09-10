@@ -38,36 +38,42 @@ const Multi = (props: RouteComponentProps) =>  {
   useEffect(() => {
     new FloppyStage(containerEl.current, minimeNonWrapped, {x:12,y:14.71,z:3}, {
       ground: false,
-      background: false
+      background: false,
+      stats: true
     });
 
     new FloppyStage(containerEl2.current, minimeImage2, {x:12,y:14.92,z:3}, {
       ground: false,
       background: false,
-      tickerColour: '#FB3B5B'
+      tickerColour: '#FB3B5B',
+      stats: true
     });
 
     const test = new FloppyStage(containerEl3.current, minimeImage3, {x:13,y:15.98,z:3}, {
       ground: false,
       background: false,
-      tickerColour: '#F57491'
+      tickerColour: '#F57491',
+      stats: true
     });
 
     new FloppyStage(containerEl4.current, minimeNonWrapped, {x:12,y:14.71,z:3}, {
       ground: false,
-      background: false
+      background: false,
+      stats: true
     });
 
     new FloppyStage(containerEl5.current, minimeImage2, {x:12,y:14.92,z:3}, {
       ground: false,
       background: false,
-      tickerColour: '#FB3B5B'
+      tickerColour: '#FB3B5B',
+      stats: true
     });
 
     new FloppyStage(containerEl6.current, minimeImage3, {x:13,y:15.98,z:3}, {
       ground: false,
       background: false,
-      tickerColour: '#F57491'
+      tickerColour: '#F57491',
+      stats: true
     });
 
     return function cleanup() {
