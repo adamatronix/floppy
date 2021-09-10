@@ -30,9 +30,12 @@ const Multi = (props: RouteComponentProps) =>  {
   const containerEl = useRef();
   const containerEl2 = useRef();
   const containerEl3 = useRef();
+  const containerEl4 = useRef();
+  const containerEl5 = useRef();
+  const containerEl6 = useRef();
 
   useEffect(() => {
-    new FloppyStage(containerEl.current, minimeNonWrapped, {x:12,y:17.70,z:3}, {
+    new FloppyStage(containerEl.current, minimeNonWrapped, {x:12,y:14.71,z:3}, {
       ground: false,
       background: false
     });
@@ -49,6 +52,22 @@ const Multi = (props: RouteComponentProps) =>  {
       tickerColour: '#F57491'
     });
 
+    new FloppyStage(containerEl4.current, minimeNonWrapped, {x:12,y:14.71,z:3}, {
+      ground: false,
+      background: false
+    });
+
+    new FloppyStage(containerEl5.current, minimeImage2, {x:12,y:14.92,z:3}, {
+      ground: false,
+      background: false,
+      tickerColour: '#FB3B5B'
+    });
+
+    new FloppyStage(containerEl6.current, minimeImage3, {x:13,y:15.98,z:3}, {
+      ground: false,
+      background: false,
+      tickerColour: '#F57491'
+    });
 
     return function cleanup() {
       test.destroy();
@@ -63,6 +82,11 @@ const Multi = (props: RouteComponentProps) =>  {
     </div>
     <div style={{ width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl2}></div>
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl3}></div>
+    <div style={{display:'flex', justifyContent: 'flex-start'}}>
+      <div style={{ width: '40vw', height: '100vh', overflow: 'hidden'}} ref={containerEl4}></div>
+    </div>
+    <div style={{ width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl5}></div>
+    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl6}></div>
     </>
   )
 
