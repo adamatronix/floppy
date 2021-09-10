@@ -77,16 +77,17 @@ const Multi = (props: RouteComponentProps) =>  {
 
   return (
     <>
-    <div style={{display:'flex', justifyContent: 'flex-end'}}>
-      <div style={{ width: '40vw', height: '100vh', overflow: 'hidden'}} ref={containerEl}></div>
+    <div style={{display:'flex'}}>
+      <div style={{ position: 'relative', width: '40vw', height: '100vh', overflow: 'hidden'}} ref={containerEl}></div>
+      <div style={{ position: 'relative', width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl2}></div>
     </div>
-    <div style={{ width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl2}></div>
-    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl3}></div>
+    
+    <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl3}></div>
     <div style={{display:'flex', justifyContent: 'flex-start'}}>
-      <div style={{ width: '40vw', height: '100vh', overflow: 'hidden'}} ref={containerEl4}></div>
+      <div style={{ position: 'relative', width: '40vw', height: '100vh', overflow: 'hidden'}} ref={containerEl4}></div>
     </div>
-    <div style={{ width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl5}></div>
-    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl6}></div>
+    <div style={{ position: 'relative', width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl5}></div>
+    <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl6}></div>
     </>
   )
 

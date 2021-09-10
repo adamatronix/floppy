@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { gsap } from "gsap";
+import Stats from 'three/examples/jsm/libs/stats.module';
 import FloppyObject from './FloppyObject';
 import FloppyAlbum from './FloppyAlbum';
 import seensoundTexture from './assets/seensounds-uvmap_rotationADAM.png';
@@ -24,6 +25,7 @@ class FloppyStage {
   floppy: any;
   texture:string;
   dimensions:any;
+  stats:Stats;
 
 
   constructor(el: HTMLDivElement, texture:string, dimensions:any, options?: LooseObject) {
@@ -34,11 +36,12 @@ class FloppyStage {
       ground: true,
       background: true,
       trailEffect: false,
-      tickerColour: '#FFF'
+      tickerColour: '#FFF',
+      stats: false
     }
 
     this.options = { ...this.options, ...options};
-
+    this.stats = this.options.stats ? this.setupStats() : null;
     this.setupWorld();
     this.setupEvents();
     this.renderFrame();
@@ -47,6 +50,18 @@ class FloppyStage {
   setupEvents = () => {
     document.body.addEventListener("mousemove", this.onMouseMove.bind(this));
     window.addEventListener("scroll", this.onScroll.bind(this));
+  }
+
+  setupStats = () => {
+    const stats = Stats();
+    stats.setMode(0);
+
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0';
+    stats.domElement.style.top = '0';
+    this.container.appendChild(stats.domElement);
+
+    return stats;
   }
 
   setupWorld = () => {
@@ -119,6 +134,7 @@ class FloppyStage {
     this.floppy.tickerTextHorizontal.needsUpdate = true;
     
     this.renderer.render( this.scene, this.camera );
+    this.stats ? this.stats.update() : null;
     requestAnimationFrame(this.renderFrame);
   }
 
