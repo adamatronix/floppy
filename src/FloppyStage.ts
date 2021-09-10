@@ -142,10 +142,14 @@ class FloppyStage {
   stopRender = () => {
     cancelAnimationFrame(this.requestId);
     this.requestId = undefined;
+    this.floppy.ticker.stopRender();
+    this.floppy.tickerHorizontal.stopRender();
   }
 
   startRender = () => {
     this.renderFrame();
+    this.floppy.ticker.startRender();
+    this.floppy.tickerHorizontal.startRender();
   }
 
   moveObject = (x:number,y:number) => {

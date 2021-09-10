@@ -11,18 +11,31 @@ import minimeImage3 from './assets/MiniMe_Section4_03_DT.jpg';
 
 const Standard = (props: RouteComponentProps) =>  {
   const containerEl = useRef();
+  const isRendering = useRef(true);
+  const example = useRef<FloppyStage>();
 
   useEffect(() => {
-    const example = new FloppyStage(containerEl.current, minimeNonWrapped, {x:12,y:14.70,z:3}, {
+    example.current = new FloppyStage(containerEl.current, minimeNonWrapped, {x:12,y:14.70,z:3}, {
       ground: false,
       background: false,
       trailEffect: false,
       stats: true
     });
+    
   }, []);
 
+  const toggle = () => {
+    if(isRendering.current) {
+      example.current.stopRender();
+      isRendering.current = false;
+    } else {
+      example.current.startRender();
+      isRendering.current = true;
+    }
+  }
+
   return (
-    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl}></div>
+    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl} onClick={toggle}></div>
   )
 
 }
