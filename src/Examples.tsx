@@ -44,6 +44,8 @@ const Multi = (props: RouteComponentProps) =>  {
   const containerEl4 = useRef();
   const containerEl5 = useRef();
   const containerEl6 = useRef();
+  const containerEl7 = useRef();
+  const containerEl8 = useRef();
   const examples = useRef<FloppyStage[]>([]);
 
   useEffect(() => {
@@ -87,6 +89,19 @@ const Multi = (props: RouteComponentProps) =>  {
       stats: true
     }));
 
+    examples.current.push(new FloppyStage(containerEl7.current, minimeNonWrapped, {x:12,y:14.71,z:3}, {
+      ground: false,
+      background: false,
+      stats: true
+    }));
+
+    examples.current.push(new FloppyStage(containerEl8.current, minimeImage2, {x:12,y:14.92,z:3}, {
+      ground: false,
+      background: false,
+      tickerColour: '#FB3B5B',
+      stats: true
+    }));
+
     return function cleanup() {
       examples.current.forEach((example) => {
         example.destroy();
@@ -109,6 +124,10 @@ const Multi = (props: RouteComponentProps) =>  {
     <div style={{display:'flex'}}>
       <div onClick={()=>toggle(0)} style={{ position: 'relative', width: '40vw', height: '100vh', overflow: 'hidden'}} ref={containerEl}></div>
       <div onClick={()=>toggle(1)} style={{ position: 'relative', width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl2}></div>
+    </div>
+    <div style={{display:'flex'}}>
+      <div onClick={()=>toggle(6)} style={{ position: 'relative', width: '40vw', height: '100vh', overflow: 'hidden'}} ref={containerEl7}></div>
+      <div onClick={()=>toggle(7)} style={{ position: 'relative', width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl8}></div>
     </div>
     
     <div onClick={()=>toggle(2)} style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl3}></div>
