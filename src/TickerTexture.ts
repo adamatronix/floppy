@@ -15,6 +15,7 @@ class TickerTexture {
   imageArray:any = new Array();
   orientation:string;
   tickerColour:string;
+  requestID:number;
 
   constructor(orientation:string, ticketColour:string) {
    const self = this;
@@ -40,10 +41,11 @@ class TickerTexture {
      self.ctx.drawImage(self.imageTexture, self.imageArray[0].x, self.imageArray[0].y, width, height);
    }
 
-   this.update();
+   this.startRender();
   }
 
   update = () => {
+    this.requestID = requestAnimationFrame(this.update);
     this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
     this.ctx.fillStyle = this.tickerColour;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -75,8 +77,15 @@ class TickerTexture {
       }
       
     });
-    
-    requestAnimationFrame(this.update);
+  }
+
+  startRender = () => {
+    this.update();
+  }
+
+  stopRender = () => {
+    cancelAnimationFrame(this.requestID);
+    this.requestID = undefined;
   }
 }
 

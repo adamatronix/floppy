@@ -36,8 +36,9 @@ class FloppyObject {
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerText } ) );
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerTextHorizontal } ) );
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerTextHorizontal } ) );
-    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xACD2DD } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF } ) );
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: texture  } ) );
+    
 
     const cubeGeo = new THREE.BoxGeometry(boxDimensions.x, boxDimensions.y, boxDimensions.z);
     const cubeMat = new THREE.MeshPhongMaterial({color: '#ACD2DD'});
@@ -46,8 +47,6 @@ class FloppyObject {
 
     this.mesh.rotation.x = Math.PI * .5;
     this.mesh.rotation.z = Math.PI * 1;
-    this.mesh.castShadow = true;
-    this.mesh.receiveShadow = true;
   }
 }
 

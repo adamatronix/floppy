@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { gsap } from "gsap";
+import Stats from 'three/examples/jsm/libs/stats.module';
 import FloppyObject from './FloppyObject';
 import FloppyAlbum from './FloppyAlbum';
 import seensoundTexture from './assets/seensounds-uvmap_rotationADAM.png';
@@ -24,7 +25,9 @@ class FloppyStage {
   floppy: any;
   texture:string;
   dimensions:any;
-
+  stats:Stats;
+  requestId:number;
+  intersectionObserver:IntersectionObserver;
 
   constructor(el: HTMLDivElement, texture:string, dimensions:any, options?: LooseObject) {
     this.container = el;
@@ -34,19 +37,46 @@ class FloppyStage {
       ground: true,
       background: true,
       trailEffect: false,
-      tickerColour: '#FFF'
+      tickerColour: '#FFF',
+      stats: false
     }
 
     this.options = { ...this.options, ...options};
-
+    this.stats = this.options.stats ? this.setupStats() : null;
     this.setupWorld();
     this.setupEvents();
-    this.renderFrame();
+    this.setupObserver();
   }
 
   setupEvents = () => {
-    document.body.addEventListener("mousemove", this.onMouseMove.bind(this));
-    window.addEventListener("scroll", this.onScroll.bind(this));
+    document.body.addEventListener("mousemove", this.onMouseMove);
+    window.addEventListener("scroll", this.onScroll);
+  }
+
+  setupObserver = () => {
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.startRender();
+        } else {
+          this.stopRender();
+        }
+      });     
+   });
+
+   this.intersectionObserver.observe(this.container);
+  }
+
+  setupStats = () => {
+    const stats = Stats();
+    stats.setMode(0);
+
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0';
+    stats.domElement.style.top = '0';
+    this.container.appendChild(stats.domElement);
+
+    return stats;
   }
 
   setupWorld = () => {
@@ -114,16 +144,31 @@ class FloppyStage {
   }
 
   renderFrame = () => {
+    this.requestId = requestAnimationFrame(this.renderFrame);
     this.renderer.clear(this.options.trailEffect ? false : true);
     this.floppy.tickerText.needsUpdate = true;
     this.floppy.tickerTextHorizontal.needsUpdate = true;
     
     this.renderer.render( this.scene, this.camera );
-    requestAnimationFrame(this.renderFrame);
+    this.stats ? this.stats.update() : null;
+  }
+
+  stopRender = () => {
+    cancelAnimationFrame(this.requestId);
+    this.requestId = undefined;
+    this.floppy.ticker.stopRender();
+    this.floppy.tickerHorizontal.stopRender();
+    this.destroyEvents();
+  }
+
+  startRender = () => {
+    this.renderFrame();
+    this.floppy.ticker.startRender();
+    this.floppy.tickerHorizontal.startRender();
+    this.setupEvents();
   }
 
   moveObject = (x:number,y:number) => {
-
     const posX = x - this.origin.x;
     const posY = y - this.origin.y;
 
@@ -186,10 +231,14 @@ class FloppyStage {
     this.cachedMouse = { x:x, y:y };
   }
 
+  destroyEvents = () => {
+    document.body.removeEventListener("mousemove", this.onMouseMove);
+    window.removeEventListener("scroll", this.onScroll);
+  }
+
   destroy = () => {
     this.container.innerHTML = '';
-    document.body.removeEventListener("mousemove", this.onMouseMove.bind(this));
-    window.removeEventListener("scroll", this.onScroll.bind(this));
+    this.destroyEvents();
   }
 
 }
