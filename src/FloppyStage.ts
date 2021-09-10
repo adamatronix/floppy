@@ -26,6 +26,7 @@ class FloppyStage {
   texture:string;
   dimensions:any;
   stats:Stats;
+  requestId:number;
 
 
   constructor(el: HTMLDivElement, texture:string, dimensions:any, options?: LooseObject) {
@@ -129,13 +130,18 @@ class FloppyStage {
   }
 
   renderFrame = () => {
+    this.requestId = requestAnimationFrame(this.renderFrame);
     this.renderer.clear(this.options.trailEffect ? false : true);
     this.floppy.tickerText.needsUpdate = true;
     this.floppy.tickerTextHorizontal.needsUpdate = true;
     
     this.renderer.render( this.scene, this.camera );
     this.stats ? this.stats.update() : null;
-    requestAnimationFrame(this.renderFrame);
+  }
+
+  stopRender = () => {
+    cancelAnimationFrame(this.requestId);
+    this.requestId = undefined;
   }
 
   moveObject = (x:number,y:number) => {
