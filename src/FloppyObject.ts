@@ -20,7 +20,6 @@ class FloppyObject {
     this.ticker = new TickerTexture('vertical',tickerColour);
     this.tickerHorizontal = new TickerTexture('horizontal',tickerColour);
     this.createShape(boxDimensions);
-    console.log('Floppy Object constructor');
   }
 
   createShape = (boxDimensions: LooseObject) => {
