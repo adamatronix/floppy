@@ -24,7 +24,7 @@ const Standard = (props: RouteComponentProps) =>  {
   }, []);
 
   const toggle = () => {
-    if(example.current.isRendering) {
+    if(example.current.requestId) {
       example.current.stopRender();
     } else {
       example.current.startRender();
