@@ -45,7 +45,7 @@ class FloppyStage {
     this.stats = this.options.stats ? this.setupStats() : null;
     this.setupWorld();
     this.setupEvents();
-    this.renderFrame();
+    this.startRender();
   }
 
   setupEvents = () => {
@@ -142,6 +142,10 @@ class FloppyStage {
   stopRender = () => {
     cancelAnimationFrame(this.requestId);
     this.requestId = undefined;
+  }
+
+  startRender = () => {
+    this.renderFrame();
   }
 
   moveObject = (x:number,y:number) => {
