@@ -2,8 +2,7 @@ import * as THREE from 'three';
 import { gsap } from "gsap";
 import Stats from 'three/examples/jsm/libs/stats.module';
 import FloppyObject from './FloppyObject';
-import FloppyAlbum from './FloppyAlbum';
-import seensoundTexture from './assets/seensounds-uvmap_rotationADAM.png';
+import { findPointBetweenTwo } from './utils/findPointBetweenTwo';
 
 interface Origin {
   x: number;
@@ -38,6 +37,7 @@ class FloppyStage {
       background: true,
       trailEffect: false,
       tickerColour: '#FFF',
+      elastic: false,
       stats: false
     }
 
@@ -172,8 +172,17 @@ class FloppyStage {
     const posX = x - this.origin.x;
     const posY = y - this.origin.y;
 
-    //console.log(`(${posX},${posY})`)
-
+    if(this.options.elastic) {
+      const distance = findPointBetweenTwo(0.002,0,0,posX,posY);
+      gsap.to(this.floppy.mesh.position, 
+        { 
+          duration: 2,
+          z: distance.y,
+          x: distance.x
+        }
+      );
+    }
+    
     if(-400 < posX && posX < 400) {
       let range = 400 - (-400);
       let adjustedX = posX + 400;
@@ -206,7 +215,6 @@ class FloppyStage {
         //this.floppy.mesh.rotation.x = ((Math.PI * .5) - 0.75) + movement;
       }
     }
-
   }
 
   onScroll = () => {
