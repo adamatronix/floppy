@@ -11,7 +11,6 @@ import minimeImage3 from './assets/MiniMe_Section4_03_DT.jpg';
 
 const Standard = (props: RouteComponentProps) =>  {
   const containerEl = useRef();
-  const isRendering = useRef(true);
   const example = useRef<FloppyStage>();
 
   useEffect(() => {
@@ -25,12 +24,10 @@ const Standard = (props: RouteComponentProps) =>  {
   }, []);
 
   const toggle = () => {
-    if(isRendering.current) {
+    if(example.current.isRendering) {
       example.current.stopRender();
-      isRendering.current = false;
     } else {
       example.current.startRender();
-      isRendering.current = true;
     }
   }
 
