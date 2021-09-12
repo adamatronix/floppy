@@ -41,14 +41,20 @@ class FloppyStage {
       tickerColour: '#FFF',
       elastic: false,
       stats: false,
-      puncturable: false
+      puncturable: false,
+      slaveMode: false
     }
 
     this.options = { ...this.options, ...options};
     this.stats = this.options.stats ? this.setupStats() : null;
-    this.setupWorld();
     this.setupEvents();
-    this.setupObserver();
+
+    if(this.options.slaveMode) {
+      this.setupScene();
+    } else {
+      this.setupWorld();
+      this.setupObserver();
+    }
   }
 
   setupEvents = () => {
@@ -80,6 +86,39 @@ class FloppyStage {
     this.container.appendChild(stats.domElement);
 
     return stats;
+  }
+
+  setupScene = () => {
+    const bounding = this.container.getBoundingClientRect();
+    this.origin = { x: bounding.x + this.container.offsetWidth/2, y: bounding.y + this.container.offsetHeight/2 };
+
+    this.scene = new THREE.Scene();
+    this.scene.userData.element = this.container;
+    const fov = 45;
+    const aspect = 2;  // the canvas default
+    const near = 0.1;
+    const far = 500;
+    this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+    this.camera.position.set(0, 30, 0);
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+    this.camera.aspect = this.container.offsetWidth / this.container.offsetHeight;
+		this.camera.updateProjectionMatrix();
+
+    const ambient = new THREE.AmbientLight( 0xcccccc );
+	  this.scene.add( ambient );
+
+    const light = new THREE.PointLight( 0xffffff, 0.2);
+    light.castShadow = true;
+    light.shadow.camera.near = 0.1;
+    light.shadow.camera.far = 3000;
+    light.shadow.mapSize.width = 2024;
+    light.shadow.mapSize.height = 2024;
+    // move the light back and up a bit
+    light.position.set( -10, 20, -10 );
+    this.scene.add(light);
+
+    this.floppy = new FloppyObject(this.dimensions, this.texture, this.options.tickerColour);
+    this.scene.add(this.floppy.mesh);
   }
 
   setupWorld = () => {

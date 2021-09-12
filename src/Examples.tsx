@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { render } from 'react-dom';
 import { Router, RouteComponentProps, Link } from "@reach/router";
 import FloppyStage from './FloppyStage';
+import FloppyRenderer from './FloppyRenderer';
 import TickerTexture from './TickerTexture';
 import seensoundTexture from './assets/seensounds-uvmap_rotationADAM.png';
 import minimeTexture from './assets/minime-uvmap.png';
@@ -40,6 +41,7 @@ const Standard = (props: RouteComponentProps) =>  {
 }
 
 const Multi = (props: RouteComponentProps) =>  {
+  const mainEl = useRef();
   const containerEl = useRef();
   const containerEl2 = useRef();
   const containerEl3 = useRef();
@@ -54,9 +56,11 @@ const Multi = (props: RouteComponentProps) =>  {
     examples.current.push(new FloppyStage(containerEl.current, minimeNonWrapped, {x:12,y:14.71,z:3}, {
       ground: false,
       background: false,
-      stats: true
+      stats: true,
+      trailEffect: true,
+      elastic: true
     }));
-
+    
     examples.current.push(new FloppyStage(containerEl2.current, minimeImage2, {x:12,y:14.92,z:3}, {
       ground: false,
       background: false,
@@ -123,6 +127,7 @@ const Multi = (props: RouteComponentProps) =>  {
 
   return (
     <>
+    <div style={{ position: 'absolute', left: '0', width: '100%', height: '100vh', overflow: 'hidden'}} ref={mainEl}></div>
     <div style={{display:'flex'}}>
       <div onClick={()=>toggle(0)} style={{ position: 'relative', width: '40vw', height: '100vh', overflow: 'hidden'}} ref={containerEl}></div>
       <div onClick={()=>toggle(1)} style={{ position: 'relative', width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl2}></div>
@@ -141,6 +146,44 @@ const Multi = (props: RouteComponentProps) =>  {
     </>
   )
 
+}
+
+const SlaveMode = (props: RouteComponentProps) => {
+
+  const mainEl = useRef();
+  const containerEl = useRef();
+  const containerEl2 = useRef();
+  const examples = useRef<FloppyStage[]>([]);
+
+  useEffect(()=>{
+    examples.current.push(new FloppyStage(containerEl.current, minimeNonWrapped, {x:12,y:14.71,z:3}, {
+      ground: false,
+      background: false,
+      stats: true,
+      slaveMode: true,
+      elastic: true,
+      puncturable: 300
+    }));
+    
+    examples.current.push(new FloppyStage(containerEl2.current, minimeImage2, {x:12,y:14.92,z:3}, {
+      ground: false,
+      background: false,
+      tickerColour: '#FB3B5B',
+      stats: true,
+      slaveMode: true
+    }));
+
+    new FloppyRenderer(mainEl.current,examples.current);
+  },[])
+
+  
+  return (
+    <>
+      <div style={{ position: 'absolute', left: '0', width: '100%', height: '100vh', overflow: 'hidden'}} ref={mainEl}></div>
+      <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl}></div>
+      <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl2}></div>
+    </>
+  )
 }
 
 const Ticker = (props: RouteComponentProps) =>  {
@@ -163,6 +206,7 @@ const Example = () => {
     <Router>
       <Standard path="/" />
       <Multi path="/multiple" />
+      <SlaveMode path="/slave"/> 
       <Ticker path="/tickertexture" />
     </Router>
   )
