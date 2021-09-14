@@ -40,6 +40,7 @@ class TickerTexture {
     let height = self.orientation === 'vertical' ? 2575 : 2575 *  self.imageTexture.height / self.imageTexture.width;
      self.ctx.drawImage(self.imageTexture, self.imageArray[0].x, self.imageArray[0].y, width, height);
      self.startRender();
+     console.log(self.imageTexture);
    }
 
    
@@ -69,7 +70,7 @@ class TickerTexture {
     this.imageArray.forEach((image:Origin) => {
       let width = this.orientation === 'vertical' ? 2575 * this.imageTexture.width / this.imageTexture.height : 2575;
       let height = this.orientation === 'vertical' ? 2575 : 2575 * this.imageTexture.height / this.imageTexture.width;
-      this.ctx.drawImage(this.imageTexture, image.x, image.y, width, height);
+      //this.ctx.drawImage(this.imageTexture, image.x, image.y, width, height);
 
       if(this.orientation === 'vertical') {
         image.y += 4;
