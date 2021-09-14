@@ -4,6 +4,8 @@ import { Router, RouteComponentProps, Link } from "@reach/router";
 import FloppyStage from './FloppyStage';
 import FloppyRenderer from './FloppyRenderer';
 import TickerTexture from './TickerTexture';
+import TickerTextureH from './assets/Mini Me Logo Horizontal.png';
+import TickerTextureV from './assets/Mini Me Logo Vertical.png';
 import seensoundTexture from './assets/seensounds-uvmap_rotationADAM.png';
 import minimeTexture from './assets/minime-uvmap.png';
 import minimeNonWrapped from './assets/MiniMe_Section4_01_DT.jpg';
@@ -58,54 +60,70 @@ const Multi = (props: RouteComponentProps) =>  {
       background: false,
       stats: true,
       trailEffect: true,
-      elastic: true
+      elastic: true,
+      tickerTextureH: 'https://ithk-pro-itmall-resources.oss-cn-hongkong.aliyuncs.com/2/2021/9/14/16315914693339160.png',
+      tickerTextureV: 'https://ithk-pro-itmall-resources.oss-cn-hongkong.aliyuncs.com/2/2021/9/14/16315914693401137.png'
     }));
     
     examples.current.push(new FloppyStage(containerEl2.current, minimeImage2, {x:12,y:14.92,z:3}, {
       ground: false,
       background: false,
       tickerColour: '#FB3B5B',
-      stats: true
+      stats: true,
+      tickerTextureH: TickerTextureH,
+      tickerTextureV: TickerTextureV
     }));
 
     examples.current.push(new FloppyStage(containerEl3.current, minimeImage3, {x:13,y:15.98,z:3}, {
       ground: false,
       background: false,
       tickerColour: '#F57491',
-      stats: true
+      stats: true,
+      tickerTextureH: TickerTextureH,
+      tickerTextureV: TickerTextureV
     }));
 
     examples.current.push(new FloppyStage(containerEl4.current, minimeNonWrapped, {x:12,y:14.71,z:3}, {
       ground: false,
       background: false,
-      stats: true
+      stats: true,
+      tickerTextureH: TickerTextureH,
+      tickerTextureV: TickerTextureV
     }));
 
     examples.current.push(new FloppyStage(containerEl5.current, minimeImage2, {x:12,y:14.92,z:3}, {
       ground: false,
       background: false,
       tickerColour: '#FB3B5B',
-      stats: true
+      stats: true,
+      tickerTextureH: TickerTextureH,
+      tickerTextureV: TickerTextureV
     }));
 
     examples.current.push(new FloppyStage(containerEl6.current, minimeImage3, {x:13,y:15.98,z:3}, {
       ground: false,
       background: false,
       tickerColour: '#F57491',
-      stats: true
+      stats: true,
+      tickerTextureH: TickerTextureH,
+      tickerTextureV: TickerTextureV
     }));
 
     examples.current.push(new FloppyStage(containerEl7.current, minimeNonWrapped, {x:12,y:14.71,z:3}, {
       ground: false,
       background: false,
-      stats: true
+      stats: true,
+      tickerTextureH: TickerTextureH,
+      tickerTextureV: TickerTextureV
     }));
 
     examples.current.push(new FloppyStage(containerEl8.current, minimeImage2, {x:12,y:14.92,z:3}, {
       ground: false,
       background: false,
       tickerColour: '#FB3B5B',
-      stats: true
+      stats: true,
+      tickerTextureH: TickerTextureH,
+      tickerTextureV: TickerTextureV
     }));
 
     return function cleanup() {
@@ -189,7 +207,7 @@ const SlaveMode = (props: RouteComponentProps) => {
 const Ticker = (props: RouteComponentProps) =>  {
 
   useEffect(() => {
-    new TickerTexture('vertical', "#FFF");
+    new TickerTexture('vertical', "#FFF", TickerTextureV);
   }, []);
 
   return (

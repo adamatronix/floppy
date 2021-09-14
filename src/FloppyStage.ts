@@ -42,7 +42,9 @@ class FloppyStage {
       elastic: false,
       stats: false,
       puncturable: false,
-      slaveMode: false
+      slaveMode: false,
+      tickerTextureH: null,
+      tickerTextureV: null
     }
 
     this.options = { ...this.options, ...options};
@@ -117,7 +119,7 @@ class FloppyStage {
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
 
-    this.floppy = new FloppyObject(this.dimensions, this.texture, this.options.tickerColour);
+    this.floppy = new FloppyObject(this.dimensions, this.texture, this.options.tickerColour, this.options.tickerTextureH, this.options.tickerTextureV);
     this.scene.add(this.floppy.mesh);
   }
 
@@ -167,7 +169,7 @@ class FloppyStage {
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
 
-    this.floppy = new FloppyObject(this.dimensions, this.texture, this.options.tickerColour);
+    this.floppy = new FloppyObject(this.dimensions, this.texture, this.options.tickerColour, this.options.tickerTextureH, this.options.tickerTextureV);
     this.scene.add(this.floppy.mesh);
 
     /*this.floppy = new FloppyAlbum(this.texture, (mesh: THREE.Group) => {
@@ -188,8 +190,10 @@ class FloppyStage {
   renderFrame = () => {
     this.requestId = requestAnimationFrame(this.renderFrame);
     this.renderer.clear(this.options.trailEffect ? false : true);
+
     this.floppy.tickerText.needsUpdate = true;
     this.floppy.tickerTextHorizontal.needsUpdate = true;
+    
     
     this.renderer.render( this.scene, this.camera );
     this.stats ? this.stats.update() : null;

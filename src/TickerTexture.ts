@@ -18,7 +18,7 @@ class TickerTexture {
   requestID:number;
   textLoaded:boolean = false;
 
-  constructor(orientation:string, ticketColour:string) {
+  constructor(orientation:string, ticketColour:string, tickerImage:string) {
    const self = this;
    this.orientation = orientation;
    this.tickerColour = ticketColour;
@@ -35,14 +35,15 @@ class TickerTexture {
    this.imageArray.push({x: x, y: y, isFlanked: false});
    
    this.imageTexture = new Image();
-   this.imageTexture.src = this.orientation === 'vertical' ? logoVertical : logoHorizontal;
+   this.imageTexture.crossOrigin = "Anonymous";
+   this.imageTexture.src = tickerImage;
+   
    this.imageTexture.onload = function(){
     let width = self.orientation === 'vertical' ? 2575 * self.imageTexture.width / self.imageTexture.height : 2575;
     let height = self.orientation === 'vertical' ? 2575 : 2575 *  self.imageTexture.height / self.imageTexture.width;
      self.ctx.drawImage(self.imageTexture, self.imageArray[0].x, self.imageArray[0].y, width, height);
      self.textLoaded = true;
      self.startRender();
-
    }
 
    
