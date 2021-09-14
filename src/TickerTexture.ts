@@ -39,9 +39,10 @@ class TickerTexture {
     let width = self.orientation === 'vertical' ? 2575 * self.imageTexture.width / self.imageTexture.height : 2575;
     let height = self.orientation === 'vertical' ? 2575 : 2575 *  self.imageTexture.height / self.imageTexture.width;
      self.ctx.drawImage(self.imageTexture, self.imageArray[0].x, self.imageArray[0].y, width, height);
+     self.startRender();
    }
 
-   this.startRender();
+   
   }
 
   update = () => {
@@ -59,7 +60,7 @@ class TickerTexture {
         this.imageArray.push({x: x, y: y, isFlanked: false})
         image.isFlanked = true;
       }
-
+ 
       if(refAxis > edge) {
         this.imageArray.splice(index,1);
       }
