@@ -15,10 +15,10 @@ class FloppyObject {
   tickerTextHorizontal:CanvasTexture;
   tickerColour:string
 
-  constructor(boxDimensions: LooseObject, image: string, tickerColour:string) {
+  constructor(boxDimensions: LooseObject, image: string, tickerColour:string, tickerImageH:string, tickerImageV:string) {
     this.image = image;
-    this.ticker = new TickerTexture('vertical',tickerColour);
-    this.tickerHorizontal = new TickerTexture('horizontal',tickerColour);
+    this.ticker = new TickerTexture('vertical',tickerColour,tickerImageV);
+    this.tickerHorizontal = new TickerTexture('horizontal',tickerColour,tickerImageH);
     this.createShape(boxDimensions);
   }
 
