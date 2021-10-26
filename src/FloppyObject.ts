@@ -48,6 +48,16 @@ class FloppyObject {
     this.mesh.rotation.x = Math.PI * .5;
     this.mesh.rotation.z = Math.PI * 1;
   }
+
+  startRender = () => {
+    this.ticker.startRender();
+    this.tickerHorizontal.startRender();
+  }
+
+  stopRender = () => {
+    this.ticker.stopRender();
+    this.tickerHorizontal.stopRender();
+  }
 }
 
 export default FloppyObject;

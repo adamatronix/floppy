@@ -202,15 +202,13 @@ class FloppyStage {
   stopRender = () => {
     cancelAnimationFrame(this.requestId);
     this.requestId = undefined;
-    this.floppy.ticker.stopRender();
-    this.floppy.tickerHorizontal.stopRender();
+    this.floppy.stopRender();
     this.destroyEvents();
   }
 
   startRender = () => {
     this.renderFrame();
-    this.floppy.ticker.startRender();
-    this.floppy.tickerHorizontal.startRender();
+    this.floppy.startRender();
     this.setupEvents();
   }
 
