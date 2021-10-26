@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { render } from 'react-dom';
 import { Router, RouteComponentProps, Link } from "@reach/router";
 import FloppyStage from './FloppyStage';
+import FloppyObject from './FloppyObject';
 import FloppyRenderer from './FloppyRenderer';
 import TickerTexture from './TickerTexture';
 import TickerTextureH from './assets/Mini Me Logo Horizontal.png';
@@ -17,7 +18,8 @@ const Standard = (props: RouteComponentProps) =>  {
   const example = useRef<FloppyStage>();
 
   useEffect(() => {
-    example.current = new FloppyStage(containerEl.current, minimeNonWrapped, {x:12,y:14.70,z:3}, {
+    
+    example.current = new FloppyStage(containerEl.current, new FloppyObject({x:12,y:14.70,z:2}, minimeNonWrapped),{
       ground: false,
       background: false,
       trailEffect: true,

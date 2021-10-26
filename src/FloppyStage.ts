@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { gsap } from "gsap";
 import Stats from 'three/examples/jsm/libs/stats.module';
+import FloppyTicker from './FloppyTicker';
 import FloppyObject from './FloppyObject';
 import { findPointBetweenTwo } from './utils/findPointBetweenTwo';
 import { distanceOfLine } from './utils/distanceOfLine';
@@ -30,10 +31,9 @@ class FloppyStage {
   punctured:boolean = false;
   intersectionObserver:IntersectionObserver;
 
-  constructor(el: HTMLDivElement, texture:string, dimensions:any, options?: LooseObject) {
+  constructor(el: HTMLDivElement, floppy: FloppyObject, options?: LooseObject) {
     this.container = el;
-    this.texture = texture;
-    this.dimensions = dimensions;
+    this.floppy = floppy;
     this.options = {
       ground: true,
       background: true,
@@ -168,8 +168,6 @@ class FloppyStage {
     // move the light back and up a bit
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
-
-    this.floppy = new FloppyObject(this.dimensions, this.texture, this.options.tickerColour, this.options.tickerTextureH, this.options.tickerTextureV);
     this.scene.add(this.floppy.mesh);
 
     /*this.floppy = new FloppyAlbum(this.texture, (mesh: THREE.Group) => {
@@ -190,11 +188,7 @@ class FloppyStage {
   renderFrame = () => {
     this.requestId = requestAnimationFrame(this.renderFrame);
     this.renderer.clear(this.options.trailEffect ? false : true);
-
-    this.floppy.tickerText.needsUpdate = true;
-    this.floppy.tickerTextHorizontal.needsUpdate = true;
-    
-    
+    this.floppy.needsUpdate();
     this.renderer.render( this.scene, this.camera );
     this.stats ? this.stats.update() : null;
   }
