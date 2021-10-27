@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import FloppyObject from './FloppyObject';
 import { CanvasTexture } from 'three';
 import TickerTexture from './TickerTexture';
 
@@ -6,17 +7,15 @@ interface LooseObject {
   [key: string]: any
 }
 
-class FloppyTicker { 
-  mesh: THREE.Mesh;
-  image:string;
+class FloppyTicker extends FloppyObject { 
   ticker:TickerTexture;
   tickerHorizontal:TickerTexture;
   tickerText:CanvasTexture;
   tickerTextHorizontal:CanvasTexture;
   tickerColour:string
 
-  constructor(boxDimensions: LooseObject, image: string, tickerColour:string, tickerImageH:string, tickerImageV:string) {
-    this.image = image;
+  constructor(boxDimensions: LooseObject, image: string, tickerImageH:string, tickerImageV:string, tickerColour?:string) {
+    super(boxDimensions, image);
     this.ticker = new TickerTexture('vertical',tickerColour,tickerImageV);
     this.tickerHorizontal = new TickerTexture('horizontal',tickerColour,tickerImageH);
     this.createShape(boxDimensions);

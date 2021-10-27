@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import { Router, RouteComponentProps, Link } from "@reach/router";
 import FloppyStage from './FloppyStage';
 import FloppyObject from './FloppyObject';
+import FloppyTicker from './FloppyTicker';
 import FloppyRenderer from './FloppyRenderer';
 import TickerTexture from './TickerTexture';
 import TickerTextureH from './assets/Mini Me Logo Horizontal.png';
@@ -57,76 +58,14 @@ const Multi = (props: RouteComponentProps) =>  {
   const examples = useRef<FloppyStage[]>([]);
 
   useEffect(() => {
-    examples.current.push(new FloppyStage(containerEl.current, minimeNonWrapped, {x:12,y:14.71,z:3}, {
+    examples.current.push(new FloppyStage(containerEl.current, new FloppyTicker({x:12,y:14.70,z:2}, minimeNonWrapped,TickerTextureH,TickerTextureV, '#FFF'), {
       ground: false,
       background: false,
       stats: true,
       trailEffect: true,
-      elastic: true,
-      tickerTextureH: 'https://ithk-pro-itmall-resources.oss-cn-hongkong.aliyuncs.com/2/2021/9/14/16315914693339160.png',
-      tickerTextureV: 'https://ithk-pro-itmall-resources.oss-cn-hongkong.aliyuncs.com/2/2021/9/14/16315914693401137.png'
+      elastic: true
     }));
     
-    examples.current.push(new FloppyStage(containerEl2.current, minimeImage2, {x:12,y:14.92,z:3}, {
-      ground: false,
-      background: false,
-      tickerColour: '#FB3B5B',
-      stats: true,
-      tickerTextureH: TickerTextureH,
-      tickerTextureV: TickerTextureV
-    }));
-
-    examples.current.push(new FloppyStage(containerEl3.current, minimeImage3, {x:13,y:15.98,z:3}, {
-      ground: false,
-      background: false,
-      tickerColour: '#F57491',
-      stats: true,
-      tickerTextureH: TickerTextureH,
-      tickerTextureV: TickerTextureV
-    }));
-
-    examples.current.push(new FloppyStage(containerEl4.current, minimeNonWrapped, {x:12,y:14.71,z:3}, {
-      ground: false,
-      background: false,
-      stats: true,
-      tickerTextureH: TickerTextureH,
-      tickerTextureV: TickerTextureV
-    }));
-
-    examples.current.push(new FloppyStage(containerEl5.current, minimeImage2, {x:12,y:14.92,z:3}, {
-      ground: false,
-      background: false,
-      tickerColour: '#FB3B5B',
-      stats: true,
-      tickerTextureH: TickerTextureH,
-      tickerTextureV: TickerTextureV
-    }));
-
-    examples.current.push(new FloppyStage(containerEl6.current, minimeImage3, {x:13,y:15.98,z:3}, {
-      ground: false,
-      background: false,
-      tickerColour: '#F57491',
-      stats: true,
-      tickerTextureH: TickerTextureH,
-      tickerTextureV: TickerTextureV
-    }));
-
-    examples.current.push(new FloppyStage(containerEl7.current, minimeNonWrapped, {x:12,y:14.71,z:3}, {
-      ground: false,
-      background: false,
-      stats: true,
-      tickerTextureH: TickerTextureH,
-      tickerTextureV: TickerTextureV
-    }));
-
-    examples.current.push(new FloppyStage(containerEl8.current, minimeImage2, {x:12,y:14.92,z:3}, {
-      ground: false,
-      background: false,
-      tickerColour: '#FB3B5B',
-      stats: true,
-      tickerTextureH: TickerTextureH,
-      tickerTextureV: TickerTextureV
-    }));
 
     return function cleanup() {
       examples.current.forEach((example) => {

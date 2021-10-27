@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { gsap } from "gsap";
 import Stats from 'three/examples/jsm/libs/stats.module';
-import FloppyTicker from './FloppyTicker';
 import FloppyObject from './FloppyObject';
 import { findPointBetweenTwo } from './utils/findPointBetweenTwo';
 import { distanceOfLine } from './utils/distanceOfLine';
@@ -119,8 +118,8 @@ class FloppyStage {
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
 
-    this.floppy = new FloppyObject(this.dimensions, this.texture, this.options.tickerColour, this.options.tickerTextureH, this.options.tickerTextureV);
-    this.scene.add(this.floppy.mesh);
+    /*this.floppy = new FloppyObject(this.dimensions, this.texture, this.options.tickerColour, this.options.tickerTextureH, this.options.tickerTextureV);
+    this.scene.add(this.floppy.mesh);*/
   }
 
   setupWorld = () => {
