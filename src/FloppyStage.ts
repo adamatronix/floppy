@@ -147,13 +147,12 @@ class FloppyStage {
     
 
     const fov = 45;
-    const aspect = 2;  // the canvas default
+    const aspect = this.container.offsetWidth / this.container.offsetHeight;  // the canvas default
     const near = 0.1;
     const far = 500;
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    this.camera.position.set(0, 30, 0);
+    this.camera.position.set(0, 100, 0);
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
-    this.camera.aspect = this.container.offsetWidth / this.container.offsetHeight;
 		this.camera.updateProjectionMatrix();
 
     const ambient = new THREE.AmbientLight( 0xcccccc );

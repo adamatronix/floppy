@@ -20,14 +20,13 @@ const Standard = (props: RouteComponentProps) =>  {
 
   useEffect(() => {
     
-    example.current = new FloppyStage(containerEl.current, new FloppyObject({x:12,y:14.70,z:2}, minimeNonWrapped),{
+    example.current = new FloppyStage(containerEl.current, new FloppyObject({x:45,y:55.13,z:2}, minimeNonWrapped),{
       ground: false,
       background: false,
       trailEffect: true,
       elastic: true,
       stats: true,
       puncturable: 100,
-      manual: true
     });
     
   }, []);
