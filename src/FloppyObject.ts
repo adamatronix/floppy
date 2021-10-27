@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { CanvasTexture } from 'three';
+import { gsap } from "gsap";
 
 interface LooseObject {
   [key: string]: any
@@ -31,10 +31,13 @@ class FloppyObject {
     });    
   }
 
-  updateMaterial = (image: string) => {
+  updateMaterial = (image: string, width: number, height: number) => {
     this.image = image;
+
+    const ratio = height / width;
     this.buildMaterial((mat:any)=> {
       this.mesh.material = mat;
+      this.mesh.scale.y = this.mesh.scale.x * ratio;
     });
   }
 

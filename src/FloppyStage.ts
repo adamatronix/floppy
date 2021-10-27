@@ -211,11 +211,6 @@ class FloppyStage {
   onScroll = () => {
     const bounding = this.container.getBoundingClientRect();
     this.origin = { x: bounding.x + this.container.offsetWidth/2, y: bounding.y + this.container.offsetHeight/2 };    
-
-    if(this.cachedMouse && !this.options.manual) {
-      this.moveObject(this.cachedMouse.x, this.cachedMouse.y);
-    }
-    
   }
 
   /**

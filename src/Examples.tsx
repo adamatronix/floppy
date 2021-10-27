@@ -1,6 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { render } from 'react-dom';
 import { Router, RouteComponentProps, Link } from "@reach/router";
+import styled from 'styled-components';
 import FloppyStage from './FloppyStage';
 import FloppyObject from './FloppyObject';
 import FloppyTicker from './FloppyTicker';
@@ -13,6 +14,13 @@ import minimeTexture from './assets/minime-uvmap.png';
 import minimeNonWrapped from './assets/MiniMe_Section4_01_DT.jpg';
 import minimeImage2 from './assets/MiniMe_Section4_02_DT.jpg';
 import minimeImage3 from './assets/MiniMe_Section4_03_DT.jpg';
+import manualImg from './assets/Desktop - 59.jpg';
+import measImg from './assets/Desktop - 74 2.jpg';
+import manualabstractImg from './assets/Group 625903.jpg';
+import botanicsImg from './assets/Group 625957.jpg';
+import horseyImg from './assets/Mask Group.jpg';
+import carImg from './assets/mbc38528 1.jpg';
+
 
 const Standard = (props: RouteComponentProps) =>  {
   const containerEl = useRef();
@@ -20,7 +28,7 @@ const Standard = (props: RouteComponentProps) =>  {
   const floppy = useRef<FloppyObject>();
 
   useEffect(() => {
-    floppy.current = new FloppyObject({x:45,y:55.13,z:0.1}, minimeNonWrapped);
+    floppy.current = new FloppyObject({x:45,y:55.13,z:2}, minimeNonWrapped);
     example.current = new FloppyStage(containerEl.current, floppy.current,{
       ground: false,
       background: false,
@@ -44,6 +52,159 @@ const Standard = (props: RouteComponentProps) =>  {
 
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl} onClick={toggle}></div>
+  )
+
+}
+
+const MenuItem = styled.div`
+  position: relative;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 60px;
+  width: 100%;
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 10px 20px;
+`
+
+const MenuWrapper = styled.div`
+  position: relative;
+  padding: 800px 0 0;
+  z-index: 1;
+`
+
+const CanvasWrapper = styled.div`
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: ${props => props.show ? 1 : 0};
+  transition: opacity .2s ease;
+`
+
+const StandardWithScroll = (props: RouteComponentProps) =>  {
+  const containerEl = useRef();
+  const example = useRef<FloppyStage>();
+  const floppy = useRef<FloppyObject>();
+  const [ ShowCanvas, setShowCanvas ] = useState(false);
+
+  const items = [
+    {
+      label: 'Punani Buffett',
+      img: manualImg,
+      width: 700,
+      height: 437
+    },
+    {
+      label: 'Punani Buffett',
+      img: manualabstractImg,
+      width: 600,
+      height: 740
+    },
+    {
+      label: 'Punani Buffett',
+      img: measImg,
+      width: 700,
+      height: 438
+    },
+    {
+      label: 'Punani Buffett',
+      img: botanicsImg,
+      width: 600,
+      height: 740
+    },
+    {
+      label: 'Punani Buffett',
+      img: horseyImg,
+      width: 600,
+      height: 740
+    },
+    {
+      label: 'Punani Buffett',
+      img: carImg,
+      width: 900,
+      height: 506
+    },
+    {
+      label: 'Punani Buffett',
+      img: manualImg,
+      width: 700,
+      height: 437
+    },
+    {
+      label: 'Punani Buffett',
+      img: manualabstractImg,
+      width: 600,
+      height: 740
+    },
+    {
+      label: 'Punani Buffett',
+      img: measImg,
+      width: 700,
+      height: 438
+    },
+    {
+      label: 'Punani Buffett',
+      img: botanicsImg,
+      width: 600,
+      height: 740
+    },
+    {
+      label: 'Punani Buffett',
+      img: horseyImg,
+      width: 600,
+      height: 740
+    },
+    {
+      label: 'Punani Buffett',
+      img: carImg,
+      width: 900,
+      height: 506
+    },
+  ]
+
+  useEffect(() => {
+    floppy.current = new FloppyObject({x:45,y:55.13,z:0}, minimeNonWrapped);
+    example.current = new FloppyStage(containerEl.current, floppy.current,{
+      ground: false,
+      background: false,
+      trailEffect: true,
+      elastic: true,
+      stats: false,
+      puncturable: 100,
+      animation: 'followTilt'
+    });
+    
+  }, []);
+
+  const onMouseEnter = () => {
+    example.current.renderer.clear();
+    setShowCanvas(true)
+  }
+
+  const onMouseLeave = () => {
+    setShowCanvas(false)
+  }
+
+  const itemEnter = (img,width,height) => {
+    floppy.current.updateMaterial(img,width,height);
+  }
+
+  return (
+    <div>
+      <MenuWrapper>
+        <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+          { items.map((item) => {
+            return (
+              <MenuItem onMouseEnter={()=>itemEnter(item.img,item.width,item.height)}>{item.label}</MenuItem>
+            )
+          })}
+        </div>
+      </MenuWrapper>
+      <CanvasWrapper show={ShowCanvas} ref={containerEl} />
+    </div>
+    
   )
 
 }
@@ -167,6 +328,7 @@ const Example = () => {
   return (
     <Router>
       <Standard path="/" />
+      <StandardWithScroll path="/scroll" />
       <Multi path="/multiple" />
       <SlaveMode path="/slave"/> 
       <Ticker path="/tickertexture" />
