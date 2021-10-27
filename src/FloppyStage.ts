@@ -2,8 +2,7 @@ import * as THREE from 'three';
 import { gsap } from "gsap";
 import Stats from 'three/examples/jsm/libs/stats.module';
 import FloppyObject from './FloppyObject';
-import { findPointBetweenTwo } from './utils/findPointBetweenTwo';
-import { distanceOfLine } from './utils/distanceOfLine';
+import { AnimationTypes } from './AnimationTypes';
 
 interface Origin {
   x: number;
@@ -18,10 +17,12 @@ class FloppyStage {
   options: LooseObject;
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
+  sphere: THREE.Mesh;
   renderer: THREE.WebGLRenderer;
   container: HTMLDivElement;
   origin: Origin;
   cachedMouse: Origin;
+  mouseVector: any;
   floppy: any;
   texture:string;
   dimensions:any;
@@ -42,7 +43,9 @@ class FloppyStage {
       stats: false,
       puncturable: false,
       slaveMode: false,
-      manual: false
+      manual: false,
+      animation: 'pivotRotate'
+
     }
 
     this.options = { ...this.options, ...options};
@@ -205,64 +208,6 @@ class FloppyStage {
     this.setupEvents();
   }
 
-  moveObject = (x:number,y:number) => {
-    const posX = x - this.origin.x;
-    const posY = y - this.origin.y;
-    
-    if(this.options.puncturable && !this.punctured) {
-      const proximity = distanceOfLine(0,0,posX,posY);
-      if(proximity < this.options.puncturable) 
-        this.punctured = true;
-
-      return;
-    }
-      
-
-    if(this.options.elastic) {
-      const distance = findPointBetweenTwo(0.002,0,0,posX,posY);
-      gsap.to(this.floppy.mesh.position, 
-        { 
-          duration: 2,
-          z: distance.y,
-          x: distance.x
-        }
-      );
-    }
-    
-    if(-400 < posX && posX < 400) {
-      let range = 400 - (-400);
-      let adjustedX = posX + 400;
-      let percent = adjustedX / range;
-      let movement = percent * 1.5;
-      if(this.floppy && this.floppy.mesh) {
-        gsap.to(this.floppy.mesh.rotation, 
-          { 
-            duration: .8,
-            y:  0.75 - movement,
-          }
-        );
-
-        //this.floppy.mesh.rotation.y = 0.75 - movement;
-      }
-    }
-
-    if(-400 < posY && posY < 400) {
-      let range = 400 - (-400);
-      let adjustedY = posY + 400;
-      let percent = adjustedY / range;
-      let movement = percent * 1.5;
-      if(this.floppy && this.floppy.mesh) {
-        gsap.to(this.floppy.mesh.rotation, 
-          { 
-            duration: .8,
-            x:  ((Math.PI * .5) - 0.75) + movement,
-          }
-        );
-        //this.floppy.mesh.rotation.x = ((Math.PI * .5) - 0.75) + movement;
-      }
-    }
-  }
-
   onScroll = () => {
     const bounding = this.container.getBoundingClientRect();
     this.origin = { x: bounding.x + this.container.offsetWidth/2, y: bounding.y + this.container.offsetHeight/2 };    
@@ -281,8 +226,25 @@ class FloppyStage {
    onMouseMove = (e: MouseEvent) => {
     const x = e.clientX;
     const y = e.clientY;
-    this.moveObject(x,y);
     this.cachedMouse = { x:x, y:y };
+    this.mouseVector = this.getNormalizedMouseVector(e);
+    AnimationTypes(this.floppy,this.mouseVector.x,this.mouseVector.z, this.options.animation);
+
+  }
+
+  getNormalizedMouseVector = (e: MouseEvent) => {
+    let mouse:LooseObject = {};
+
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (e.clientY / window.innerHeight) * 2 + 1;
+
+    // Make the sphere follow the mouse
+    var vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+    vector.unproject( this.camera );
+    
+    var dir = vector.sub( this.camera.position ).normalize();
+    var distance = - this.camera.position.y / dir.y;
+    return this.camera.position.clone().add( dir.multiplyScalar( distance ) );
   }
 
   destroyEvents = () => {
