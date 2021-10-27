@@ -26,7 +26,8 @@ const Standard = (props: RouteComponentProps) =>  {
       trailEffect: true,
       elastic: true,
       stats: true,
-      puncturable: 100
+      puncturable: 100,
+      manual: true
     });
     
   }, []);

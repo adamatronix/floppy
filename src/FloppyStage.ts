@@ -42,8 +42,7 @@ class FloppyStage {
       stats: false,
       puncturable: false,
       slaveMode: false,
-      tickerTextureH: null,
-      tickerTextureV: null
+      manual: false
     }
 
     this.options = { ...this.options, ...options};
@@ -59,7 +58,9 @@ class FloppyStage {
   }
 
   setupEvents = () => {
-    document.body.addEventListener("mousemove", this.onMouseMove);
+    if(!this.options.manual)
+      document.body.addEventListener("mousemove", this.onMouseMove);
+
     window.addEventListener("scroll", this.onScroll);
   }
 
@@ -267,7 +268,7 @@ class FloppyStage {
     const bounding = this.container.getBoundingClientRect();
     this.origin = { x: bounding.x + this.container.offsetWidth/2, y: bounding.y + this.container.offsetHeight/2 };    
 
-    if(this.cachedMouse) {
+    if(this.cachedMouse && !this.options.manual) {
       this.moveObject(this.cachedMouse.x, this.cachedMouse.y);
     }
     
