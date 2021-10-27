@@ -24,12 +24,6 @@ object-assign
  * @author: Jack Doyle, jack@greensock.com
 */
 
-/**
- * @license
- * Copyright 2010-2021 Three.js Authors
- * SPDX-License-Identifier: MIT
- */
-
 /** @license React v0.20.2
  * scheduler.production.min.js
  *
