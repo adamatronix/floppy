@@ -17,10 +17,11 @@ import minimeImage3 from './assets/MiniMe_Section4_03_DT.jpg';
 const Standard = (props: RouteComponentProps) =>  {
   const containerEl = useRef();
   const example = useRef<FloppyStage>();
+  const floppy = useRef<FloppyObject>();
 
   useEffect(() => {
-    
-    example.current = new FloppyStage(containerEl.current, new FloppyObject({x:45,y:55.13,z:2}, minimeNonWrapped),{
+    floppy.current = new FloppyObject({x:45,y:55.13,z:0.1}, minimeNonWrapped);
+    example.current = new FloppyStage(containerEl.current, floppy.current,{
       ground: false,
       background: false,
       trailEffect: true,
@@ -33,11 +34,12 @@ const Standard = (props: RouteComponentProps) =>  {
   }, []);
 
   const toggle = () => {
-    if(example.current.requestId) {
+    floppy.current.updateMaterial(minimeImage2);
+    /*if(example.current.requestId) {
       example.current.stopRender();
     } else {
       example.current.startRender();
-    }
+    }*/
   }
 
   return (
