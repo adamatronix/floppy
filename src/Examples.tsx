@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { render } from 'react-dom';
 import { Router, RouteComponentProps, Link } from "@reach/router";
 import styled from 'styled-components';
+import loadTextures from './utils/loadTextures';
 import FloppyStage from './FloppyStage';
 import FloppyObject from './FloppyObject';
 import FloppyTicker from './FloppyTicker';
@@ -87,6 +88,7 @@ const StandardWithScroll = (props: RouteComponentProps) =>  {
   const containerEl = useRef();
   const example = useRef<FloppyStage>();
   const floppy = useRef<FloppyObject>();
+  const texturesStore = useRef<any>();
   const [ ShowCanvas, setShowCanvas ] = useState(false);
 
   const items = [
@@ -165,6 +167,11 @@ const StandardWithScroll = (props: RouteComponentProps) =>  {
   ]
 
   useEffect(() => {
+    const promisesArray = loadTextures(items);
+
+    Promise.all(promisesArray).then((textures)=>{
+      texturesStore.current = textures;
+    })
     floppy.current = new FloppyObject({x:45,y:55.13,z:0}, minimeNonWrapped);
     example.current = new FloppyStage(containerEl.current, floppy.current,{
       ground: false,
@@ -187,17 +194,17 @@ const StandardWithScroll = (props: RouteComponentProps) =>  {
     setShowCanvas(false)
   }
 
-  const itemEnter = (img,width,height) => {
-    floppy.current.updateMaterial(img,width,height);
+  const itemEnter = (index,width,height) => {
+    floppy.current.updateMaterial(texturesStore.current[index],width,height);
   }
 
   return (
     <div>
       <MenuWrapper>
         <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-          { items.map((item) => {
+          { items.map((item,i) => {
             return (
-              <MenuItem onMouseEnter={()=>itemEnter(item.img,item.width,item.height)}>{item.label}</MenuItem>
+              <MenuItem onMouseEnter={()=>itemEnter(i,item.width,item.height)}>{item.label}</MenuItem>
             )
           })}
         </div>

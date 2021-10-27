@@ -7,41 +7,57 @@ interface LooseObject {
 
 class FloppyObject { 
   mesh: THREE.Mesh;
-  image:string;
+  image: any;
 
-  constructor(boxDimensions: LooseObject, image: string) {
+  constructor(boxDimensions: LooseObject, image: any) {
     this.image = image;
-    this.createShape(boxDimensions);
+    this.createShape(boxDimensions,image);
   }
 
-  buildMaterial = (callback: any) => {
-    new THREE.TextureLoader().load(this.image, (texture) => {
+  buildMaterial = (asset:any, callback: any) => {
+    let cubeMaterialArray;
+    if(asset instanceof THREE.Texture) {
+      cubeMaterialArray = this.getMaterialArray(asset);
+      if(callback)
+        callback(cubeMaterialArray);
+    } else {
+      new THREE.TextureLoader().load(asset, (texture) => {
 
-      // Create an array of materials to be used in a cube, one for each side
-      const cubeMaterialArray = [];
+        cubeMaterialArray = this.getMaterialArray(texture);
+        if(callback)
+          callback(cubeMaterialArray);
+      });    
+    }
 
-      // order to add materials: x+,x-,y+,y-,z+,z-
-      cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
-      cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
-      cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
-      cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
-      cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF } ) );
-      cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: texture  } ) );
-      callback(cubeMaterialArray);
-    });    
+    
   }
 
-  updateMaterial = (image: string, width: number, height: number) => {
+  getMaterialArray = (texture:THREE.Texture) => {
+    // Create an array of materials to be used in a cube, one for each side
+    const cubeMaterialArray = [];
+      
+    // order to add materials: x+,x-,y+,y-,z+,z-
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: texture  } ) );
+
+    return cubeMaterialArray;
+  }
+
+  updateMaterial = (image: any, width: number, height: number) => {
     this.image = image;
 
     const ratio = height / width;
-    this.buildMaterial((mat:any)=> {
+    this.buildMaterial(image, (mat:any)=> {
       this.mesh.material = mat;
       this.mesh.scale.y = this.mesh.scale.x * ratio;
     });
   }
 
-  createShape = (boxDimensions: LooseObject) => {
+  createShape = (boxDimensions: LooseObject, image:any) => {
 
     const cubeGeo = new THREE.BoxGeometry(boxDimensions.x, boxDimensions.y, boxDimensions.z);
     this.mesh = new THREE.Mesh(cubeGeo, null);
@@ -50,9 +66,11 @@ class FloppyObject {
     this.mesh.rotation.x = Math.PI * .5;
     this.mesh.rotation.z = Math.PI * 1;
 
-    this.buildMaterial((mat:any)=> {
+    this.buildMaterial(image, (mat:any)=> {
       this.mesh.material = mat;
     });
+    
+    
   }
 
   startRender = () => {
