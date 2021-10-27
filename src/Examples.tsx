@@ -27,6 +27,7 @@ const Standard = (props: RouteComponentProps) =>  {
       elastic: true,
       stats: true,
       puncturable: 100,
+      animation: 'followTilt'
     });
     
   }, []);

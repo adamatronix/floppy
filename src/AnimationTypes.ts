@@ -47,6 +47,39 @@ export const AnimationTypes = (floppy:FloppyObject, x:number, y:number, type:str
             }
           );
        }
+    },
+
+    followTilt: (floppy:FloppyObject, x:number, y:number) => {
+      // Go to where the cursor is.
+      gsap.to(floppy.mesh.position, 
+        { 
+          duration: 1,
+          z: y,
+          x: x,
+          onUpdate: () => {
+            
+            const distanceX = Math.floor(x) - Math.floor(floppy.mesh.position.x);
+            const distanceY = Math.floor(y) - Math.floor(floppy.mesh.position.z);
+      
+            let percentX = distanceX / 40;
+            let percentY = distanceY / 40;
+            let movementX = percentX * -1.5;
+            let movementY = percentY * 1.5;
+
+            gsap.to(floppy.mesh.rotation, 
+              { 
+                ease: "power2.out",
+                duration: .8,
+                y: movementX,
+                x: ((Math.PI * .5)) + movementY
+              }
+            );
+          },
+          onComplete: () => {
+
+          }
+        }
+      );
     }
   }
   
