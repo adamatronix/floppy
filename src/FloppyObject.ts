@@ -1,6 +1,5 @@
 import * as THREE from 'three';
-import { CanvasTexture } from 'three';
-import TickerTexture from './TickerTexture';
+import { gsap } from "gsap";
 
 interface LooseObject {
   [key: string]: any
@@ -8,45 +7,82 @@ interface LooseObject {
 
 class FloppyObject { 
   mesh: THREE.Mesh;
-  image:string;
-  ticker:TickerTexture;
-  tickerHorizontal:TickerTexture;
-  tickerText:CanvasTexture;
-  tickerTextHorizontal:CanvasTexture;
-  tickerColour:string
+  image: any;
 
-  constructor(boxDimensions: LooseObject, image: string, tickerColour:string, tickerImageH:string, tickerImageV:string) {
+  constructor(boxDimensions: LooseObject, image: any) {
     this.image = image;
-    this.ticker = new TickerTexture('vertical',tickerColour,tickerImageV);
-    this.tickerHorizontal = new TickerTexture('horizontal',tickerColour,tickerImageH);
-    this.createShape(boxDimensions);
+    this.createShape(boxDimensions,image);
   }
 
-  createShape = (boxDimensions: LooseObject) => {
-    const texture = new THREE.TextureLoader().load(this.image);
-    this.tickerText = new THREE.CanvasTexture(this.ticker.canvas);
-    this.tickerTextHorizontal = new THREE.CanvasTexture(this.tickerHorizontal.canvas);
-    //this.tickerText.repeat.set(0.008, 1);
+  buildMaterial = (asset:any, callback: any) => {
+    let cubeMaterialArray;
+    if(asset instanceof THREE.Texture) {
+      cubeMaterialArray = this.getMaterialArray(asset);
+      if(callback)
+        callback(cubeMaterialArray);
+    } else {
+      new THREE.TextureLoader().load(asset, (texture) => {
+
+        cubeMaterialArray = this.getMaterialArray(texture);
+        if(callback)
+          callback(cubeMaterialArray);
+      });    
+    }
+
     
+  }
+
+  getMaterialArray = (texture:THREE.Texture) => {
     // Create an array of materials to be used in a cube, one for each side
     const cubeMaterialArray = [];
-
+      
     // order to add materials: x+,x-,y+,y-,z+,z-
-    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerText } ) );
-    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerText } ) );
-    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerTextHorizontal } ) );
-    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: this.tickerTextHorizontal } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF } ) );
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: texture  } ) );
-    
+
+    return cubeMaterialArray;
+  }
+
+  updateMaterial = (image: any, width: number, height: number) => {
+    this.image = image;
+
+    const ratio = height / width;
+    this.buildMaterial(image, (mat:any)=> {
+      this.mesh.material = mat;
+      this.mesh.scale.y = this.mesh.scale.x * ratio;
+    });
+  }
+
+  createShape = (boxDimensions: LooseObject, image:any) => {
 
     const cubeGeo = new THREE.BoxGeometry(boxDimensions.x, boxDimensions.y, boxDimensions.z);
-    const cubeMat = new THREE.MeshPhongMaterial({color: '#ACD2DD'});
-    this.mesh = new THREE.Mesh(cubeGeo, cubeMaterialArray);
+    this.mesh = new THREE.Mesh(cubeGeo, null);
     this.mesh.position.set(0, 0, 0);
 
     this.mesh.rotation.x = Math.PI * .5;
     this.mesh.rotation.z = Math.PI * 1;
+
+    this.buildMaterial(image, (mat:any)=> {
+      this.mesh.material = mat;
+    });
+    
+    
+  }
+
+  startRender = () => {
+    // put rendering stuff here
+  }
+
+  stopRender = () => {
+    // put stop rendering stuff here
+  }
+
+  needsUpdate = () => {
+
   }
 }
 

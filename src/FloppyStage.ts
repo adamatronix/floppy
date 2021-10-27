@@ -2,8 +2,7 @@ import * as THREE from 'three';
 import { gsap } from "gsap";
 import Stats from 'three/examples/jsm/libs/stats.module';
 import FloppyObject from './FloppyObject';
-import { findPointBetweenTwo } from './utils/findPointBetweenTwo';
-import { distanceOfLine } from './utils/distanceOfLine';
+import { AnimationTypes } from './AnimationTypes';
 
 interface Origin {
   x: number;
@@ -18,10 +17,12 @@ class FloppyStage {
   options: LooseObject;
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
+  sphere: THREE.Mesh;
   renderer: THREE.WebGLRenderer;
   container: HTMLDivElement;
   origin: Origin;
   cachedMouse: Origin;
+  mouseVector: any;
   floppy: any;
   texture:string;
   dimensions:any;
@@ -30,10 +31,9 @@ class FloppyStage {
   punctured:boolean = false;
   intersectionObserver:IntersectionObserver;
 
-  constructor(el: HTMLDivElement, texture:string, dimensions:any, options?: LooseObject) {
+  constructor(el: HTMLDivElement, floppy: FloppyObject, options?: LooseObject) {
     this.container = el;
-    this.texture = texture;
-    this.dimensions = dimensions;
+    this.floppy = floppy;
     this.options = {
       ground: true,
       background: true,
@@ -43,8 +43,9 @@ class FloppyStage {
       stats: false,
       puncturable: false,
       slaveMode: false,
-      tickerTextureH: null,
-      tickerTextureV: null
+      manual: false,
+      animation: 'pivotRotate'
+
     }
 
     this.options = { ...this.options, ...options};
@@ -60,7 +61,9 @@ class FloppyStage {
   }
 
   setupEvents = () => {
-    document.body.addEventListener("mousemove", this.onMouseMove);
+    if(!this.options.manual)
+      document.body.addEventListener("mousemove", this.onMouseMove);
+
     window.addEventListener("scroll", this.onScroll);
   }
 
@@ -119,8 +122,8 @@ class FloppyStage {
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
 
-    this.floppy = new FloppyObject(this.dimensions, this.texture, this.options.tickerColour, this.options.tickerTextureH, this.options.tickerTextureV);
-    this.scene.add(this.floppy.mesh);
+    /*this.floppy = new FloppyObject(this.dimensions, this.texture, this.options.tickerColour, this.options.tickerTextureH, this.options.tickerTextureV);
+    this.scene.add(this.floppy.mesh);*/
   }
 
   setupWorld = () => {
@@ -147,13 +150,12 @@ class FloppyStage {
     
 
     const fov = 45;
-    const aspect = 2;  // the canvas default
+    const aspect = this.container.offsetWidth / this.container.offsetHeight;  // the canvas default
     const near = 0.1;
     const far = 500;
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    this.camera.position.set(0, 30, 0);
+    this.camera.position.set(0, 100, 0);
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
-    this.camera.aspect = this.container.offsetWidth / this.container.offsetHeight;
 		this.camera.updateProjectionMatrix();
 
     const ambient = new THREE.AmbientLight( 0xcccccc );
@@ -168,8 +170,6 @@ class FloppyStage {
     // move the light back and up a bit
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
-
-    this.floppy = new FloppyObject(this.dimensions, this.texture, this.options.tickerColour, this.options.tickerTextureH, this.options.tickerTextureV);
     this.scene.add(this.floppy.mesh);
 
     /*this.floppy = new FloppyAlbum(this.texture, (mesh: THREE.Group) => {
@@ -190,11 +190,7 @@ class FloppyStage {
   renderFrame = () => {
     this.requestId = requestAnimationFrame(this.renderFrame);
     this.renderer.clear(this.options.trailEffect ? false : true);
-
-    this.floppy.tickerText.needsUpdate = true;
-    this.floppy.tickerTextHorizontal.needsUpdate = true;
-    
-    
+    this.floppy.needsUpdate();
     this.renderer.render( this.scene, this.camera );
     this.stats ? this.stats.update() : null;
   }
@@ -202,84 +198,19 @@ class FloppyStage {
   stopRender = () => {
     cancelAnimationFrame(this.requestId);
     this.requestId = undefined;
-    this.floppy.ticker.stopRender();
-    this.floppy.tickerHorizontal.stopRender();
+    this.floppy.stopRender();
     this.destroyEvents();
   }
 
   startRender = () => {
     this.renderFrame();
-    this.floppy.ticker.startRender();
-    this.floppy.tickerHorizontal.startRender();
+    this.floppy.startRender();
     this.setupEvents();
-  }
-
-  moveObject = (x:number,y:number) => {
-    const posX = x - this.origin.x;
-    const posY = y - this.origin.y;
-    
-    if(this.options.puncturable && !this.punctured) {
-      const proximity = distanceOfLine(0,0,posX,posY);
-      if(proximity < this.options.puncturable) 
-        this.punctured = true;
-
-      return;
-    }
-      
-
-    if(this.options.elastic) {
-      const distance = findPointBetweenTwo(0.002,0,0,posX,posY);
-      gsap.to(this.floppy.mesh.position, 
-        { 
-          duration: 2,
-          z: distance.y,
-          x: distance.x
-        }
-      );
-    }
-    
-    if(-400 < posX && posX < 400) {
-      let range = 400 - (-400);
-      let adjustedX = posX + 400;
-      let percent = adjustedX / range;
-      let movement = percent * 1.5;
-      if(this.floppy && this.floppy.mesh) {
-        gsap.to(this.floppy.mesh.rotation, 
-          { 
-            duration: .8,
-            y:  0.75 - movement,
-          }
-        );
-
-        //this.floppy.mesh.rotation.y = 0.75 - movement;
-      }
-    }
-
-    if(-400 < posY && posY < 400) {
-      let range = 400 - (-400);
-      let adjustedY = posY + 400;
-      let percent = adjustedY / range;
-      let movement = percent * 1.5;
-      if(this.floppy && this.floppy.mesh) {
-        gsap.to(this.floppy.mesh.rotation, 
-          { 
-            duration: .8,
-            x:  ((Math.PI * .5) - 0.75) + movement,
-          }
-        );
-        //this.floppy.mesh.rotation.x = ((Math.PI * .5) - 0.75) + movement;
-      }
-    }
   }
 
   onScroll = () => {
     const bounding = this.container.getBoundingClientRect();
     this.origin = { x: bounding.x + this.container.offsetWidth/2, y: bounding.y + this.container.offsetHeight/2 };    
-
-    if(this.cachedMouse) {
-      this.moveObject(this.cachedMouse.x, this.cachedMouse.y);
-    }
-    
   }
 
   /**
@@ -290,8 +221,25 @@ class FloppyStage {
    onMouseMove = (e: MouseEvent) => {
     const x = e.clientX;
     const y = e.clientY;
-    this.moveObject(x,y);
     this.cachedMouse = { x:x, y:y };
+    this.mouseVector = this.getNormalizedMouseVector(e);
+    AnimationTypes(this.floppy,this.mouseVector.x,this.mouseVector.z, this.options.animation);
+
+  }
+
+  getNormalizedMouseVector = (e: MouseEvent) => {
+    let mouse:LooseObject = {};
+
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = - (e.clientY / window.innerHeight) * 2 + 1;
+
+    // Make the sphere follow the mouse
+    var vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+    vector.unproject( this.camera );
+    
+    var dir = vector.sub( this.camera.position ).normalize();
+    var distance = - this.camera.position.y / dir.y;
+    return this.camera.position.clone().add( dir.multiplyScalar( distance ) );
   }
 
   destroyEvents = () => {
