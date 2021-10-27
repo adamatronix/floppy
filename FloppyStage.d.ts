@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import Stats from 'three/examples/jsm/libs/stats.module';
+import FloppyObject from './FloppyObject';
 interface Origin {
     x: number;
     y: number;
@@ -11,10 +12,12 @@ declare class FloppyStage {
     options: LooseObject;
     scene: THREE.Scene;
     camera: THREE.PerspectiveCamera;
+    sphere: THREE.Mesh;
     renderer: THREE.WebGLRenderer;
     container: HTMLDivElement;
     origin: Origin;
     cachedMouse: Origin;
+    mouseVector: any;
     floppy: any;
     texture: string;
     dimensions: any;
@@ -22,7 +25,7 @@ declare class FloppyStage {
     requestId: number;
     punctured: boolean;
     intersectionObserver: IntersectionObserver;
-    constructor(el: HTMLDivElement, texture: string, dimensions: any, options?: LooseObject);
+    constructor(el: HTMLDivElement, floppy: FloppyObject, options?: LooseObject);
     setupEvents: () => void;
     setupObserver: () => void;
     setupStats: () => Stats;
@@ -31,7 +34,6 @@ declare class FloppyStage {
     renderFrame: () => void;
     stopRender: () => void;
     startRender: () => void;
-    moveObject: (x: number, y: number) => void;
     onScroll: () => void;
     /**
      * On mouse move trigger a tween to the current mouse position.
@@ -39,6 +41,7 @@ declare class FloppyStage {
      * @param {object} e Mouse event
      */
     onMouseMove: (e: MouseEvent) => void;
+    getNormalizedMouseVector: (e: MouseEvent) => THREE.Vector3;
     destroyEvents: () => void;
     destroy: () => void;
 }

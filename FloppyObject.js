@@ -1,33 +1,62 @@
 import * as THREE from 'three';
-import TickerTexture from './TickerTexture';
 var FloppyObject = /** @class */ (function () {
-    function FloppyObject(boxDimensions, image, tickerColour, tickerImageH, tickerImageV) {
+    function FloppyObject(boxDimensions, image) {
         var _this = this;
-        this.createShape = function (boxDimensions) {
-            var texture = new THREE.TextureLoader().load(_this.image);
-            _this.tickerText = new THREE.CanvasTexture(_this.ticker.canvas);
-            _this.tickerTextHorizontal = new THREE.CanvasTexture(_this.tickerHorizontal.canvas);
-            //this.tickerText.repeat.set(0.008, 1);
+        this.buildMaterial = function (asset, callback) {
+            var cubeMaterialArray;
+            if (asset instanceof THREE.Texture) {
+                cubeMaterialArray = _this.getMaterialArray(asset);
+                if (callback)
+                    callback(cubeMaterialArray);
+            }
+            else {
+                new THREE.TextureLoader().load(asset, function (texture) {
+                    cubeMaterialArray = _this.getMaterialArray(texture);
+                    if (callback)
+                        callback(cubeMaterialArray);
+                });
+            }
+        };
+        this.getMaterialArray = function (texture) {
             // Create an array of materials to be used in a cube, one for each side
             var cubeMaterialArray = [];
             // order to add materials: x+,x-,y+,y-,z+,z-
-            cubeMaterialArray.push(new THREE.MeshPhongMaterial({ map: _this.tickerText }));
-            cubeMaterialArray.push(new THREE.MeshPhongMaterial({ map: _this.tickerText }));
-            cubeMaterialArray.push(new THREE.MeshPhongMaterial({ map: _this.tickerTextHorizontal }));
-            cubeMaterialArray.push(new THREE.MeshPhongMaterial({ map: _this.tickerTextHorizontal }));
+            cubeMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0xFFFFFF }));
+            cubeMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0xFFFFFF }));
+            cubeMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0xFFFFFF }));
+            cubeMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0xFFFFFF }));
             cubeMaterialArray.push(new THREE.MeshPhongMaterial({ color: 0xFFFFFF }));
             cubeMaterialArray.push(new THREE.MeshPhongMaterial({ map: texture }));
+            return cubeMaterialArray;
+        };
+        this.updateMaterial = function (image, width, height) {
+            _this.image = image;
+            var ratio = height / width;
+            _this.buildMaterial(image, function (mat) {
+                _this.mesh.material = mat;
+                _this.mesh.scale.y = _this.mesh.scale.x * ratio;
+            });
+        };
+        this.createShape = function (boxDimensions, image) {
             var cubeGeo = new THREE.BoxGeometry(boxDimensions.x, boxDimensions.y, boxDimensions.z);
-            var cubeMat = new THREE.MeshPhongMaterial({ color: '#ACD2DD' });
-            _this.mesh = new THREE.Mesh(cubeGeo, cubeMaterialArray);
+            _this.mesh = new THREE.Mesh(cubeGeo, null);
             _this.mesh.position.set(0, 0, 0);
             _this.mesh.rotation.x = Math.PI * .5;
             _this.mesh.rotation.z = Math.PI * 1;
+            _this.buildMaterial(image, function (mat) {
+                _this.mesh.material = mat;
+            });
+        };
+        this.startRender = function () {
+            // put rendering stuff here
+        };
+        this.stopRender = function () {
+            // put stop rendering stuff here
+        };
+        this.needsUpdate = function () {
         };
         this.image = image;
-        this.ticker = new TickerTexture('vertical', tickerColour, tickerImageV);
-        this.tickerHorizontal = new TickerTexture('horizontal', tickerColour, tickerImageH);
-        this.createShape(boxDimensions);
+        this.createShape(boxDimensions, image);
     }
     return FloppyObject;
 }());

@@ -1,18 +1,17 @@
 import * as THREE from 'three';
-import { CanvasTexture } from 'three';
-import TickerTexture from './TickerTexture';
 interface LooseObject {
     [key: string]: any;
 }
 declare class FloppyObject {
     mesh: THREE.Mesh;
-    image: string;
-    ticker: TickerTexture;
-    tickerHorizontal: TickerTexture;
-    tickerText: CanvasTexture;
-    tickerTextHorizontal: CanvasTexture;
-    tickerColour: string;
-    constructor(boxDimensions: LooseObject, image: string, tickerColour: string, tickerImageH: string, tickerImageV: string);
-    createShape: (boxDimensions: LooseObject) => void;
+    image: any;
+    constructor(boxDimensions: LooseObject, image: any);
+    buildMaterial: (asset: any, callback: any) => void;
+    getMaterialArray: (texture: THREE.Texture) => THREE.MeshPhongMaterial[];
+    updateMaterial: (image: any, width: number, height: number) => void;
+    createShape: (boxDimensions: LooseObject, image: any) => void;
+    startRender: () => void;
+    stopRender: () => void;
+    needsUpdate: () => void;
 }
 export default FloppyObject;
