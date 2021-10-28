@@ -7,7 +7,7 @@ module.exports = {
     example: './src/Examples.tsx' 
   },
   output: {
-    filename: '[name].bundle.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'lib')
   },
   module: {
