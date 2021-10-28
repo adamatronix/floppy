@@ -1,7 +1,9 @@
 import FloppyStage from './FloppyStage';
-import FloppyRenderer from './FloppyRenderer';
+import FloppyObject from './FloppyObject';
+import loadTextures from './utils/loadTextures';
 
 export {
   FloppyStage,
-  FloppyRenderer
+  FloppyObject,
+  loadTextures
 }

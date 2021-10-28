@@ -10,17 +10,14 @@ import FloppyRenderer from './FloppyRenderer';
 import TickerTexture from './TickerTexture';
 import TickerTextureH from './assets/Mini Me Logo Horizontal.png';
 import TickerTextureV from './assets/Mini Me Logo Vertical.png';
-import seensoundTexture from './assets/seensounds-uvmap_rotationADAM.png';
-import minimeTexture from './assets/minime-uvmap.png';
 import minimeNonWrapped from './assets/MiniMe_Section4_01_DT.jpg';
-import minimeImage2 from './assets/MiniMe_Section4_02_DT.jpg';
-import minimeImage3 from './assets/MiniMe_Section4_03_DT.jpg';
 import manualImg from './assets/Desktop - 59.jpg';
 import measImg from './assets/Desktop - 74 2.jpg';
 import manualabstractImg from './assets/Group 625903.jpg';
 import botanicsImg from './assets/Group 625957.jpg';
 import horseyImg from './assets/Mask Group.jpg';
 import carImg from './assets/mbc38528 1.jpg';
+import transFlopImg from './assets/Group 625953.png';
 
 
 const Standard = (props: RouteComponentProps) =>  {
@@ -43,7 +40,6 @@ const Standard = (props: RouteComponentProps) =>  {
   }, []);
 
   const toggle = () => {
-    floppy.current.updateMaterial(minimeImage2);
     /*if(example.current.requestId) {
       example.current.stopRender();
     } else {
@@ -73,7 +69,7 @@ const MenuWrapper = styled.div`
   z-index: 1;
 `
 
-const CanvasWrapper = styled.div`
+const CanvasWrapper = styled.div<{show:boolean}>`
   width: 100%;
   height: 100vh;
   overflow: hidden;
@@ -94,9 +90,9 @@ const StandardWithScroll = (props: RouteComponentProps) =>  {
   const items = [
     {
       label: 'Punani Buffett',
-      img: manualImg,
-      width: 700,
-      height: 437
+      img: transFlopImg,
+      width: 419,
+      height: 638
     },
     {
       label: 'Punani Buffett',
@@ -194,7 +190,7 @@ const StandardWithScroll = (props: RouteComponentProps) =>  {
     setShowCanvas(false)
   }
 
-  const itemEnter = (index,width,height) => {
+  const itemEnter = (index:number,width:number,height:number) => {
     floppy.current.updateMaterial(texturesStore.current[index],width,height);
   }
 
@@ -278,44 +274,6 @@ const Multi = (props: RouteComponentProps) =>  {
 
 }
 
-const SlaveMode = (props: RouteComponentProps) => {
-
-  const mainEl = useRef();
-  const containerEl = useRef();
-  const containerEl2 = useRef();
-  const examples = useRef<FloppyStage[]>([]);
-
-  useEffect(()=>{
-    examples.current.push(new FloppyStage(containerEl.current, minimeNonWrapped, {x:12,y:14.71,z:3}, {
-      ground: false,
-      background: false,
-      stats: true,
-      slaveMode: true,
-      elastic: true,
-      puncturable: 300
-    }));
-    
-    examples.current.push(new FloppyStage(containerEl2.current, minimeImage2, {x:12,y:14.92,z:3}, {
-      ground: false,
-      background: false,
-      tickerColour: '#FB3B5B',
-      stats: true,
-      slaveMode: true
-    }));
-
-    new FloppyRenderer(mainEl.current,examples.current);
-  },[])
-
-  
-  return (
-    <>
-      <div style={{ position: 'absolute', left: '0', width: '100%', height: '100vh', overflow: 'hidden'}} ref={mainEl}></div>
-      <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl}></div>
-      <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl2}></div>
-    </>
-  )
-}
-
 const Ticker = (props: RouteComponentProps) =>  {
 
   useEffect(() => {
@@ -331,15 +289,8 @@ const Ticker = (props: RouteComponentProps) =>  {
 
 
 const Example = () => {
-
   return (
-    <Router>
-      <Standard path="/" />
-      <StandardWithScroll path="/scroll" />
-      <Multi path="/multiple" />
-      <SlaveMode path="/slave"/> 
-      <Ticker path="/tickertexture" />
-    </Router>
+    <StandardWithScroll />
   )
   
 }
