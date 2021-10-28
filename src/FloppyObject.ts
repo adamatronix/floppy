@@ -42,7 +42,7 @@ class FloppyObject {
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF  } ) );
     cubeMaterialArray.push( new THREE.MeshPhongMaterial( { color: 0xFFFFFF } ) );
-    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: texture  } ) );
+    cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: texture, transparent: true  } ) );
 
     return cubeMaterialArray;
   }
