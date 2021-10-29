@@ -56,7 +56,7 @@ class FloppyStage {
       this.setupScene();
     } else {
       this.setupWorld();
-      this.setupObserver();
+      //this.setupObserver();
     }
   }
 
