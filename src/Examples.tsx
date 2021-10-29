@@ -163,21 +163,29 @@ const StandardWithScroll = (props: RouteComponentProps) =>  {
   ]
 
   useEffect(() => {
-    const promisesArray = loadTextures(items);
 
-    Promise.all(promisesArray).then((textures)=>{
-      texturesStore.current = textures;
-    })
-    floppy.current = new FloppyObject({x:45,y:55.13,z:0}, minimeNonWrapped);
-    example.current = new FloppyStage(containerEl.current, floppy.current,{
-      ground: false,
-      background: false,
-      trailEffect: true,
-      elastic: true,
-      stats: false,
-      puncturable: 100,
-      animation: 'followTilt'
-    });
+    if(containerEl.current) {
+      const promisesArray = loadTextures(items);
+
+      Promise.all(promisesArray).then((textures)=>{
+        texturesStore.current = textures;
+      })
+      floppy.current = new FloppyObject({x:45,y:55.13,z:0}, minimeNonWrapped);
+
+    
+      example.current = new FloppyStage(containerEl.current, floppy.current,{
+        ground: false,
+        background: false,
+        trailEffect: true,
+        elastic: true,
+        stats: false,
+        puncturable: 100,
+        animation: 'followTilt'
+      });
+  
+      
+    }
+    
     
   }, []);
 
