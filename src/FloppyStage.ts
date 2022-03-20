@@ -260,6 +260,7 @@ class FloppyStage {
   }
 
   destroy = () => {
+    this.destroyEvents();
     cancelAnimationFrame(this.requestId);
     this.requestId = undefined;
     this.floppy.stopRender();
@@ -267,7 +268,6 @@ class FloppyStage {
     this.camera = null;
     this.renderer = null;
     this.container.innerHTML = '';
-    this.destroyEvents();
   }
 
 }

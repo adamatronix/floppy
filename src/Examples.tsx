@@ -60,7 +60,7 @@ const Standard = (props: RouteComponentProps) =>  {
 const AlbumWrapper = styled.div`
    width: 100vw; 
    height: 80vh; 
-   margin: 200px 0 0;
+   margin: 100px 0 0;
    position: relative;
 `
 
@@ -77,7 +77,7 @@ const Album = (props: RouteComponentProps) =>  {
   const floppy = useRef<FloppyAlbum>();
 
   useEffect(() => {
-    floppy.current = new FloppyAlbum(AlbumShape,SeenSounds,3.2);
+    floppy.current = new FloppyAlbum(AlbumShape,SeenSounds,1.28);
     example.current = new FloppyStage(containerEl.current, floppy.current,{
       requireCallback: true,
       ground: false,
