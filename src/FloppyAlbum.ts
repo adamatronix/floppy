@@ -1,22 +1,21 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import AlbumShape from 'url:./assets/floppy.glb';
 
 class FloppyAlbum { 
   mesh: THREE.Mesh;
   callback: Function;
 
-  constructor(image: string, scale: number) {
-    this.createShape(image, scale);
+  constructor(model:any, image: string, scale: number) {
+    this.createShape(model, image, scale);
   }
 
-  createShape = (image: string, scale: number) => {
+  createShape = (model:any, image: string, scale: number) => {
     const self = this;
     const loader = new GLTFLoader();
     const texture = new THREE.TextureLoader().load(image);
     texture.flipY = false;
     const textureMat = new THREE.MeshPhongMaterial( { map: texture } );
-    loader.load(AlbumShape, function ( gltf ) {
+    loader.load(model, function ( gltf ) {
       gltf.scene.traverse((o) => {
         if ((<THREE.Mesh> o).isMesh) {
           (<THREE.Mesh> o).material = textureMat;
