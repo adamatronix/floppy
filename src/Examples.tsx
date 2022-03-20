@@ -59,7 +59,7 @@ const Standard = (props: RouteComponentProps) =>  {
 const AlbumWrapper = styled.div`
    width: 100vw; 
    height: 80vh; 
-   margin: 80px 0 0;
+   margin: 200px 0 0;
    position: relative;
 `
 
@@ -87,6 +87,12 @@ const Album = (props: RouteComponentProps) =>  {
       animation: 'rotate'
     });
     example.current.startRender();
+
+    return () => {
+      example.current.destroy();
+      example.current = null;
+      floppy.current = null;
+    }
   }, []);
 
 
