@@ -4,6 +4,7 @@ import { Router, RouteComponentProps, Link } from "@reach/router";
 import styled from 'styled-components';
 import loadTextures from './utils/loadTextures';
 import FloppyStage from './FloppyStage';
+import FloppyAlbum from './FloppyAlbum';
 import FloppyObject from './FloppyObject';
 import FloppyTicker from './FloppyTicker';
 import FloppyRenderer from './FloppyRenderer';
@@ -18,6 +19,7 @@ import botanicsImg from './assets/Group 625957.jpg';
 import horseyImg from './assets/Mask Group.jpg';
 import carImg from './assets/mbc38528 1.jpg';
 import transFlopImg from './assets/Group 625953.png';
+import SeenSounds from './assets/seensounds-uvmap_rotationADAM.png';
 
 
 const Standard = (props: RouteComponentProps) =>  {
@@ -40,15 +42,59 @@ const Standard = (props: RouteComponentProps) =>  {
   }, []);
 
   const toggle = () => {
-    /*if(example.current.requestId) {
+    if(example.current.requestId) {
       example.current.stopRender();
     } else {
       example.current.startRender();
-    }*/
+    }
   }
 
   return (
-    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl} onClick={toggle}></div>
+    <div style={{ width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl} onClick={toggle}></div>
+  )
+
+}
+
+
+const AlbumWrapper = styled.div`
+   width: 100vw; 
+   height: 80vh; 
+   margin: 80px 0 0;
+   position: relative;
+`
+
+const AlbumInner = styled.div`
+  position: absolute;
+  height: calc(100% + 200px);
+  margin-top: -100px;
+  width: 100%;
+`
+
+const Album = (props: RouteComponentProps) =>  {
+  const containerEl = useRef();
+  const example = useRef<FloppyStage>();
+  const floppy = useRef<FloppyAlbum>();
+
+  useEffect(() => {
+    floppy.current = new FloppyAlbum(SeenSounds,3.2);
+    example.current = new FloppyStage(containerEl.current, floppy.current,{
+      requireCallback: true,
+      ground: false,
+      background: false,
+      trailEffect: false,
+      elastic: false,
+      stats: true,
+      animation: 'rotate'
+    });
+    example.current.startRender();
+  }, []);
+
+
+  return (
+    <AlbumWrapper>
+      <AlbumInner ref={containerEl}>
+      </AlbumInner>
+    </AlbumWrapper>
   )
 
 }
@@ -90,13 +136,13 @@ const StandardWithScroll = (props: RouteComponentProps) =>  {
   const items = [
     {
       label: 'Punani Buffett',
-      img: transFlopImg,
-      width: 419,
-      height: 638
+      img: 'https://images.prismic.io/adamatronix/0ead1025-54d7-4bae-b6e7-e2bfb5ec8fe8_Desktop+-+59.jpg?auto=compress%2Cformat&fm=auto&maxWidth=1000&q=50',
+      width: 700,
+      height: 437
     },
     {
       label: 'Punani Buffett',
-      img: manualabstractImg,
+      img: 'https://images.prismic.io/adamatronix/2fc042cc-86ef-4f04-8b02-8c477e6dd3c6_Mask+Group.jpg?auto=compress%2Cformat&fm=auto&maxWidth=1000&q=50',
       width: 600,
       height: 740
     },
@@ -169,21 +215,23 @@ const StandardWithScroll = (props: RouteComponentProps) =>  {
 
       Promise.all(promisesArray).then((textures)=>{
         texturesStore.current = textures;
-      })
-      floppy.current = new FloppyObject({x:45,y:55.13,z:0}, minimeNonWrapped);
+
+
+        floppy.current = new FloppyObject({x:45,y:55.13,z:0}, texturesStore.current[0]);
 
     
-      example.current = new FloppyStage(containerEl.current, floppy.current,{
-        ground: false,
-        background: false,
-        trailEffect: true,
-        elastic: true,
-        stats: false,
-        puncturable: 100,
-        animation: 'followTilt'
-      });
-  
-      
+        example.current = new FloppyStage(containerEl.current, floppy.current,{
+          ground: false,
+          background: false,
+          trailEffect: true,
+          elastic: true,
+          stats: false,
+          puncturable: 100,
+          animation: 'followTilt'
+        });
+
+        example.current.startRender();
+      })
     }
     
     
@@ -298,7 +346,7 @@ const Ticker = (props: RouteComponentProps) =>  {
 
 const Example = () => {
   return (
-    <StandardWithScroll />
+    <Album />
   )
   
 }

@@ -54,6 +54,8 @@ class FloppyObject {
     this.buildMaterial(image, (mat:any)=> {
       this.mesh.material = mat;
       this.mesh.scale.y = this.mesh.scale.x * ratio;
+
+      console.log(this.mesh.scale);
     });
   }
 
@@ -62,6 +64,8 @@ class FloppyObject {
     const cubeGeo = new THREE.BoxGeometry(boxDimensions.x, boxDimensions.y, boxDimensions.z);
     this.mesh = new THREE.Mesh(cubeGeo, null);
     this.mesh.position.set(0, 0, 0);
+
+    console.log(this.mesh.scale);
 
     this.mesh.rotation.x = Math.PI * .5;
     this.mesh.rotation.z = Math.PI * 1;
