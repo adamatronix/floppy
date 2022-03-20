@@ -1,16 +1,15 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import AlbumTexture from './assets/Parq_1.jpg';
 
 class FloppyAlbum { 
   mesh: THREE.Mesh;
   callback: Function;
 
-  constructor(model:any, image: string, scale: number) {
-    this.createShape(model, image, scale);
+  constructor(image: string, scale: number) {
+    this.createShape(image, scale);
   }
 
-  createShape = (model:any, image: string, scale: number) => {
+  createShape = (image: string, scale: number) => {
     const self = this;
     const loader = new GLTFLoader();
     const texture = new THREE.TextureLoader().load(image);
@@ -24,7 +23,7 @@ class FloppyAlbum {
     }
 
     var TextureLoader = new THREE.TextureLoader(manager);
-    TextureLoader.load(AlbumTexture, (texture) => {
+    TextureLoader.load(image, (texture) => {
       const albumtextureMat = new THREE.MeshPhongMaterial( { map: texture } );
 
       const texture2 = texture.clone();
