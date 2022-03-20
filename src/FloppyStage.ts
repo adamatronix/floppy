@@ -31,10 +31,11 @@ class FloppyStage {
   punctured:boolean = false;
   intersectionObserver:IntersectionObserver;
 
-  constructor(el: HTMLDivElement, floppy: FloppyObject, options?: LooseObject) {
+  constructor(el: HTMLDivElement, floppy: any, options?: LooseObject) {
     this.container = el;
     this.floppy = floppy;
     this.options = {
+      requireCallback: false,
       ground: true,
       background: true,
       trailEffect: false,
@@ -58,6 +59,10 @@ class FloppyStage {
       this.setupWorld();
       //this.setupObserver();
     }
+
+    if(this.options.requireCallback) {
+      this.floppy.callback = this.addMesh;
+    } 
   }
 
   setupEvents = () => {
@@ -104,7 +109,7 @@ class FloppyStage {
     const near = 0.1;
     const far = 500;
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    this.camera.position.set(0, 30, 0);
+    this.camera.position.set(0, 100, 0);
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
     this.camera.aspect = this.container.offsetWidth / this.container.offsetHeight;
 		this.camera.updateProjectionMatrix();
@@ -124,6 +129,10 @@ class FloppyStage {
 
     /*this.floppy = new FloppyObject(this.dimensions, this.texture, this.options.tickerColour, this.options.tickerTextureH, this.options.tickerTextureV);
     this.scene.add(this.floppy.mesh);*/
+  }
+
+  addMesh = (mesh: THREE.Group) => {
+    this.scene.add(mesh);
   }
 
   setupWorld = () => {
@@ -154,7 +163,7 @@ class FloppyStage {
     const near = 0.1;
     const far = 500;
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    this.camera.position.set(0, 100, 0);
+    this.camera.position.set(0,40, 0);
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 		this.camera.updateProjectionMatrix();
 
@@ -170,7 +179,10 @@ class FloppyStage {
     // move the light back and up a bit
     light.position.set( -10, 20, -10 );
     this.scene.add(light);
-    this.scene.add(this.floppy.mesh);
+    if(!this.options.requireCallback) {
+      this.scene.add(this.floppy.mesh);
+    }
+    
 
     /*this.floppy = new FloppyAlbum(this.texture, (mesh: THREE.Group) => {
       this.scene.add(mesh);
@@ -248,6 +260,12 @@ class FloppyStage {
   }
 
   destroy = () => {
+    cancelAnimationFrame(this.requestId);
+    this.requestId = undefined;
+    this.floppy.stopRender();
+    this.scene = null;
+    this.camera = null;
+    this.renderer = null;
     this.container.innerHTML = '';
     this.destroyEvents();
   }
