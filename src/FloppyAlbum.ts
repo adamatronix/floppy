@@ -25,7 +25,6 @@ class FloppyAlbum {
     var TextureLoader = new THREE.TextureLoader(manager);
     TextureLoader.load(image, (texture) => {
       const albumtextureMat = new THREE.MeshPhongMaterial( { map: texture } );
-
       const texture2 = texture.clone();
       texture2.needsUpdate = true;
       texture2.repeat.set(1,0.05);
@@ -72,8 +71,23 @@ class FloppyAlbum {
       cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: texture6 } ) );
       cubeMaterialArray.push( albumtextureMat );
   
+
+      const textureWidth = texture.image.width;
+      const textureHeight = texture.image.height;
+      let width;
+      let height; 
+      let ratio;
+      if(textureWidth > textureHeight) {
+        ratio = textureHeight / textureWidth;
+        width = 20;
+        height = 20 * ratio;
+      }  else {
+        ratio = textureWidth / textureHeight;
+        width = 20 * ratio;
+        height = 20;
+      }
   
-      const cubeGeo = new THREE.BoxGeometry(20, 20, 1);
+      const cubeGeo = new THREE.BoxGeometry(width, height, 1);
       self.mesh = new THREE.Mesh(cubeGeo, cubeMaterialArray);
       self.mesh.rotation.x = Math.PI * .5;
       self.mesh.rotation.z = Math.PI * 1;
