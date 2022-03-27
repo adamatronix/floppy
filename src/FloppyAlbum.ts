@@ -28,31 +28,31 @@ class FloppyAlbum {
 
       const texture2 = texture.clone();
       texture2.needsUpdate = true;
-      texture2.repeat.set(1,0.075);
+      texture2.repeat.set(1,0.05);
       texture2.flipY = false;
-      texture2.center = new THREE.Vector2(0.5, 0.92);
+      texture2.center = new THREE.Vector2(0.5, 0.95);
       texture2.rotation = Math.PI;
 
 
       const texture3 = texture.clone();
       texture3.needsUpdate = true;
-      texture3.repeat.set(1,0.075);
+      texture3.repeat.set(1,0.05);
       texture3.flipY = false;
-      texture3.center = new THREE.Vector2(0.5, 0.08);
+      texture3.center = new THREE.Vector2(0.5, 0.05);
       texture3.rotation = Math.PI;
 
       const texture4 = texture.clone();
       texture4.needsUpdate = true;
-      texture4.repeat.set(0.075,1);
+      texture4.repeat.set(0.05,1);
       texture4.flipY = false;
-      texture4.center = new THREE.Vector2(0.92, 0.5);
+      texture4.center = new THREE.Vector2(0.95, 0.5);
       texture4.rotation = Math.PI;
 
       const texture5 = texture.clone();
       texture5.needsUpdate = true;
-      texture5.repeat.set(0.075,1);
+      texture5.repeat.set(0.05,1);
       texture5.flipY = false;
-      texture5.center = new THREE.Vector2(0.08, 0.5);
+      texture5.center = new THREE.Vector2(0.05, 0.5);
       texture5.rotation = Math.PI;
 
 
@@ -73,7 +73,7 @@ class FloppyAlbum {
       cubeMaterialArray.push( albumtextureMat );
   
   
-      const cubeGeo = new THREE.BoxGeometry(20, 20, 1.5);
+      const cubeGeo = new THREE.BoxGeometry(20, 20, 1);
       self.mesh = new THREE.Mesh(cubeGeo, cubeMaterialArray);
       self.mesh.rotation.x = Math.PI * .5;
       self.mesh.rotation.z = Math.PI * 1;
