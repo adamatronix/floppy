@@ -52,7 +52,7 @@ const Standard = (props: RouteComponentProps) =>  {
   }
 
   return (
-    <div style={{ width: '100vw', height: '80vh', overflow: 'hidden'}} ref={containerEl} onClick={toggle}></div>
+    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'}} ref={containerEl} onClick={toggle}></div>
   )
 
 }
@@ -225,7 +225,7 @@ const StandardWithScroll = (props: RouteComponentProps) =>  {
         texturesStore.current = textures;
 
 
-        floppy.current = new FloppyObject({x:45,y:55.13,z:0}, texturesStore.current[0]);
+        floppy.current = new FloppyObject({x:18,y:18,z:0}, texturesStore.current[0]);
 
     
         example.current = new FloppyStage(containerEl.current, floppy.current,{
@@ -235,7 +235,7 @@ const StandardWithScroll = (props: RouteComponentProps) =>  {
           elastic: true,
           stats: false,
           puncturable: 100,
-          animation: 'followTilt'
+          animation: 'restrictToX'
         });
 
         example.current.startRender();
@@ -354,7 +354,7 @@ const Ticker = (props: RouteComponentProps) =>  {
 
 const Example = () => {
   return (
-    <Album />
+    <StandardWithScroll />
   )
   
 }
