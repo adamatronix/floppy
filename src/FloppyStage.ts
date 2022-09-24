@@ -188,7 +188,7 @@ class FloppyStage {
       this.scene.add(mesh);
     });*/
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: !this.options.background, preserveDrawingBuffer: this.options.trailEffect ? true : false});
+    this.renderer = new THREE.WebGLRenderer({ powerPreference: "high-performance", antialias: true, alpha: !this.options.background, preserveDrawingBuffer: this.options.trailEffect ? true : false});
     this.renderer.setClearColor( 0x000000, 0 );
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;

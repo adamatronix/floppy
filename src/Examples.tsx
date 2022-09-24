@@ -354,7 +354,7 @@ const Ticker = (props: RouteComponentProps) =>  {
 
 const Example = () => {
   return (
-    <StandardWithScroll />
+    <Album />
   )
   
 }
