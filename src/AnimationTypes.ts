@@ -9,7 +9,9 @@ export const AnimationTypes = (floppy:any, x:number, y:number, type:string) => {
 
   const types:any = {
     rotate: (floppy:any, x:number, y:number) => {
-      
+      if(!floppy || !floppy.mesh)
+        return;
+
       if(-10 < x && x < 10) {
         let range = 10 - (-10);
         let adjustedX = x + 10;
@@ -40,6 +42,8 @@ export const AnimationTypes = (floppy:any, x:number, y:number, type:string) => {
     },
 
     pivotRotate: (floppy:any, x:number, y:number) => {
+      if(!floppy || !floppy.mesh)
+        return;
 
       const distance = findPointBetweenTwo(0.1,0,0,x,y);
       gsap.to(floppy.mesh.position, 
@@ -82,6 +86,8 @@ export const AnimationTypes = (floppy:any, x:number, y:number, type:string) => {
     },
 
     followTilt: (floppy:any, x:number, y:number) => {
+      if(!floppy || !floppy.mesh)
+        return;
       // Go to where the cursor is.
       gsap.to(floppy.mesh.position, 
         { 
@@ -115,6 +121,8 @@ export const AnimationTypes = (floppy:any, x:number, y:number, type:string) => {
     },
 
     restrictToX: (floppy:any, x:number, y:number) => {
+      if(!floppy || !floppy.mesh)
+        return;
       // Go to where the cursor is.
       gsap.to(floppy.mesh.position, 
         { 
