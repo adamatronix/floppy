@@ -21,6 +21,7 @@ import carImg from './assets/mbc38528 1.jpg';
 import transFlopImg from './assets/Group 625953.png';
 import SeenSounds from './assets/Parq_1.jpg';
 import Seensounds2 from './assets/Moses_1.jpg';
+import Seensounds2Placeholder from './assets/Moses_1-placeholder.jpg';
 import AlbumShape from 'url:./assets/floppy.glb';
 
 
@@ -78,7 +79,7 @@ const Album = (props: RouteComponentProps) =>  {
   const floppy = useRef<FloppyAlbum>();
 
   useEffect(() => {
-    floppy.current = new FloppyAlbum(Seensounds2,1.28);
+    floppy.current = new FloppyAlbum(Seensounds2,1.28,1394,1680, Seensounds2Placeholder);
     example.current = new FloppyStage(containerEl.current, floppy.current,{
       requireCallback: true,
       ground: false,

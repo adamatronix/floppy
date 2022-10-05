@@ -5,24 +5,80 @@ class FloppyAlbum {
   mesh: THREE.Mesh;
   callback: Function;
 
-  constructor(image: string, scale: number) {
-    this.createShape(image, scale);
+  constructor(image: string, scale: number, width?: number, height?: number, placeholder?: string) {
+    this.createShape(image, scale, width, height, placeholder);
   }
 
-  createShape = (image: string, scale: number) => {
+  createShape = (image: string, scale: number, width?:number, height?:number, placeholder?:string) => {
     const self = this;
     const loader = new GLTFLoader();
     const texture = new THREE.TextureLoader().load(image);
     texture.flipY = false;
     const textureMat = new THREE.MeshPhongMaterial( { map: texture } );
+  
 
+    if(width && height) {
+      this.buildBaseModel(width,height,scale)
+    }
 
-    var manager = new THREE.LoadingManager();
+    if(placeholder) {
+      this.loadTexture(placeholder, (material:THREE.MeshPhongMaterial, texture:any) => {
+        if(this.mesh) {
+          this.mesh.material = material;
+        }
+
+        this.loadTexture(image, (material:THREE.MeshPhongMaterial, texture:any) => {
+          if(this.mesh) {
+            this.mesh.material = material;
+          }
+        })
+      })
+
+    } else {
+      this.loadTexture(image, (material:THREE.MeshPhongMaterial, texture:any) => {
+        if(this.mesh) {
+          this.mesh.material = material;
+        } else {
+          const textureWidth = texture.image.width;
+          const textureHeight = texture.image.height;
+          this.buildBaseModel(textureWidth,textureHeight,scale,material);
+        }
+      })
+    }
+
+    
+    
+  
+    /*
+    loader.load(model, function ( gltf ) {
+      gltf.scene.traverse((o) => {
+        if ((<THREE.Mesh> o).isMesh) {
+          (<THREE.Mesh> o).material = albumtextureMat;
+          (<THREE.Mesh> o).rotation.x = Math.PI * .5;
+          (<THREE.Mesh> o).rotation.z = Math.PI * 1;
+          (<THREE.Mesh> o).position.set( 0, 0, 0);
+          (<THREE.Mesh> o).castShadow = true;
+          (<THREE.Mesh> o).receiveShadow = true;
+          self.mesh = (<THREE.Mesh> o);
+          self.mesh.scale.set( scale, scale, scale );
+          
+        }
+      });
+
+      if(self.callback) {
+        self.callback(gltf.scene);
+      }
+      
+    } );*/
+  }
+
+  loadTexture = (image:string, callback:Function) => {
+    const manager = new THREE.LoadingManager();
     manager.onLoad = function () {
 
     }
 
-    var TextureLoader = new THREE.TextureLoader(manager);
+    const TextureLoader = new THREE.TextureLoader(manager);
     TextureLoader.load(image, (texture) => {
       const albumtextureMat = new THREE.MeshPhongMaterial( { map: texture } );
       const texture2 = texture.clone();
@@ -70,60 +126,41 @@ class FloppyAlbum {
       cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: texture2 }) );
       cubeMaterialArray.push( new THREE.MeshPhongMaterial( { map: texture6 } ) );
       cubeMaterialArray.push( albumtextureMat );
-  
 
-      const textureWidth = texture.image.width;
-      const textureHeight = texture.image.height;
+      callback(cubeMaterialArray,texture);
+     
+    });
+
+  }
+
+  buildBaseModel = (assetWidth:number,assetHeight:number, scale:number, material?:THREE.MeshPhongMaterial) => {
       let width;
       let height; 
       let ratio;
-      if(textureWidth > textureHeight) {
-        ratio = textureHeight / textureWidth;
+      if(assetWidth > assetHeight) {
+        ratio = assetHeight / assetWidth;
         width = 20;
         height = 20 * ratio;
       }  else {
-        ratio = textureWidth / textureHeight;
+        ratio = assetWidth / assetHeight;
         width = 20 * ratio;
         height = 20;
       }
   
-      const cubeGeo = new THREE.BoxGeometry(width, height, 1);
-      self.mesh = new THREE.Mesh(cubeGeo, cubeMaterialArray);
-      self.mesh.rotation.x = Math.PI * .5;
-      self.mesh.rotation.z = Math.PI * 1;
-      self.mesh.position.set( 0, 0, 0);
-      self.mesh.castShadow = true;
-      self.mesh.receiveShadow = true;
-      self.mesh.scale.set( scale, scale, scale );
 
-      if(self.callback) {
-        self.callback(this.mesh);
-      }
+    const cubeGeo = new THREE.BoxGeometry(width, height, 1);
+    this.mesh = new THREE.Mesh(cubeGeo, material || new THREE.MeshPhongMaterial( { color: 0xffffff, opacity: 0 } ));
+    this.mesh.rotation.x = Math.PI * .5;
+    this.mesh.rotation.z = Math.PI * 1;
+    this.mesh.position.set( 0, 0, 0);
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = true;
+    this.mesh.scale.set( scale, scale, scale );
+    if(this.callback) {
+      this.callback(this.mesh);
+    }
 
-    });
-    
-  
-    /*
-    loader.load(model, function ( gltf ) {
-      gltf.scene.traverse((o) => {
-        if ((<THREE.Mesh> o).isMesh) {
-          (<THREE.Mesh> o).material = albumtextureMat;
-          (<THREE.Mesh> o).rotation.x = Math.PI * .5;
-          (<THREE.Mesh> o).rotation.z = Math.PI * 1;
-          (<THREE.Mesh> o).position.set( 0, 0, 0);
-          (<THREE.Mesh> o).castShadow = true;
-          (<THREE.Mesh> o).receiveShadow = true;
-          self.mesh = (<THREE.Mesh> o);
-          self.mesh.scale.set( scale, scale, scale );
-          
-        }
-      });
-
-      if(self.callback) {
-        self.callback(gltf.scene);
-      }
-      
-    } );*/
+    return this.mesh;
   }
 
   startRender = () => {
