@@ -133,6 +133,7 @@ class FloppyStage {
 
   addMesh = (mesh: THREE.Group) => {
     this.scene.add(mesh);
+    console.log("add mesh");
   }
 
   setupWorld = () => {
@@ -143,6 +144,12 @@ class FloppyStage {
 
     const planeGeometry = new THREE.PlaneGeometry( 500, 500 );
     const planeMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff } );
+
+
+    if(this.floppy.mesh) {
+      this.addMesh(this.floppy.mesh)
+    }
+    
 
 
     if (this.options.ground) {
