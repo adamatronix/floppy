@@ -87,7 +87,9 @@ const Album = (props: RouteComponentProps) =>  {
       trailEffect: false,
       elastic: false,
       stats: true,
-      animation: 'rotate'
+      animation: 'rotate',
+      manual: true,
+      autoRotate: 6
     });
     example.current.startRender();
 
