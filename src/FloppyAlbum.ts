@@ -113,7 +113,7 @@ class FloppyAlbum {
 
       const texture6 = texture.clone();
       texture6.needsUpdate = true;
-      texture6.flipY = false;
+      texture6.flipY = true;
     
 
 
