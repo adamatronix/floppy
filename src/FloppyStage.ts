@@ -45,6 +45,7 @@ class FloppyStage {
       puncturable: false,
       slaveMode: false,
       manual: false,
+      autoRotate: 0,
       animation: 'pivotRotate'
 
     }
@@ -66,6 +67,10 @@ class FloppyStage {
   }
 
   setupEvents = () => {
+    if(this.options.autoRotate > 0) {
+      this.autoRotationAnimation(this.options.autoRotate)
+    }
+
     if(!this.options.manual)
       document.body.addEventListener("mousemove", this.onMouseMove);
 
@@ -204,6 +209,7 @@ class FloppyStage {
     this.renderer.setPixelRatio( window.devicePixelRatio );
     this.renderer.setSize( this.container.offsetWidth, this.container.offsetHeight );
     this.container.appendChild( this.renderer.domElement );
+
   }
 
   renderFrame = () => {
@@ -225,6 +231,17 @@ class FloppyStage {
     this.renderFrame();
     this.floppy.startRender();
     this.setupEvents();
+  }
+
+  autoRotationAnimation = (duration:number) => {
+    gsap.to(this.floppy.mesh.rotation, 
+      { 
+        duration: duration,
+        y:  6.28319,
+        repeat: -1,
+        ease: "linear"
+      }
+    );
   }
 
   onScroll = () => {
